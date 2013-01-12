@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScatteringWindow", "Scatter
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scattering", "Scattering\Scattering.vcxproj", "{57EF49F5-1139-4579-BDDF-80051425DCD8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScatteringTest", "ScatteringTest\ScatteringTest.vcxproj", "{2A4ADF93-62C6-4B76-B549-6AD4649F0402}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{57EF49F5-1139-4579-BDDF-80051425DCD8}.Debug|Win32.Build.0 = Debug|Win32
 		{57EF49F5-1139-4579-BDDF-80051425DCD8}.Release|Win32.ActiveCfg = Release|Win32
 		{57EF49F5-1139-4579-BDDF-80051425DCD8}.Release|Win32.Build.0 = Release|Win32
+		{2A4ADF93-62C6-4B76-B549-6AD4649F0402}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A4ADF93-62C6-4B76-B549-6AD4649F0402}.Debug|Win32.Build.0 = Debug|Win32
+		{2A4ADF93-62C6-4B76-B549-6AD4649F0402}.Release|Win32.ActiveCfg = Release|Win32
+		{2A4ADF93-62C6-4B76-B549-6AD4649F0402}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
