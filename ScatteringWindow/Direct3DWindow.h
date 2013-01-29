@@ -26,7 +26,7 @@ public:
 	virtual void drawScene(); 
 
     /* Handle Windows window messages */
-	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     // Calculate the aspect ratio of the window
 	float aspectRatio() const;

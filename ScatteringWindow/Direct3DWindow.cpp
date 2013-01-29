@@ -3,6 +3,20 @@
 
 using namespace Scattering;
 
+namespace {
+
+    // Global pointer is used to handle callback appropriately
+	Direct3DWindow* window = nullptr;
+
+}
+
+
+
+/* Windows is expecting a standalone function, so this proxies to the Window object */
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    return window->msgProc(hwnd, msg, wParam, lParam);
+}
+
 
 /* Constructor */
 Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
@@ -20,6 +34,10 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _width( 800 ),
       _height( 600 )
 {
+    window = this;
+
+    createWindow();
+    setupDirect3D();
 }
 
 
@@ -67,8 +85,8 @@ void Direct3DWindow::drawScene() {
 
 
 /* Handle Windows window messages */
-LRESULT Direct3DWindow::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    return 0;
+LRESULT Direct3DWindow::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 
@@ -80,7 +98,7 @@ float Direct3DWindow::aspectRatio() const {
 
 
 /* Releases a com pointer */
-inline void Release( IUnknown *object ) {
+inline void Direct3DWindow::Release( IUnknown *object ) {
     if( object ) {
         object->Release();
     }
@@ -89,7 +107,46 @@ inline void Release( IUnknown *object ) {
 
 /* Initialize the main application window */
 void Direct3DWindow::createWindow() {
+    
+	WNDCLASS wc;
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = WndProc; 
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = _hinstance;
+	wc.hIcon = LoadIcon(0, IDI_APPLICATION);
+	wc.hCursor = LoadCursor(0, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH) GetStockObject(NULL_BRUSH);
+	wc.lpszMenuName = 0;
+	wc.lpszClassName = L"D3DWndClassName";
 
+	auto registered = RegisterClass(&wc);
+    assert( registered );
+
+    /* Calculate the correct window size */
+	RECT R = { 0, 0, _width, _height };
+    AdjustWindowRect( &R, WS_OVERLAPPEDWINDOW, false );
+	int width  = R.right - R.left;
+	int height = R.bottom - R.top;
+
+	_hwnd = CreateWindow(
+        L"D3DWndClassName",
+        L"Atmospheric Scattering", 
+		WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        width, height,
+        0, 0,
+        _hinstance,
+        0
+    ); 
+
+    HRESULT hr = HRESULT_FROM_WIN32( GetLastError() );
+
+    assert( hr == S_OK );
+
+	ShowWindow(_hwnd, SW_SHOW);
+	UpdateWindow(_hwnd);
 }
 
 
