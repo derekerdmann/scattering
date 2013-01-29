@@ -30,12 +30,18 @@
     <ClInclude Include="ScatteringWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Direct3DWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScatteringWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Direct3DWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

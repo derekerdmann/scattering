@@ -4,7 +4,8 @@
 using namespace DirectX;
 using namespace Scattering;
 
-Planet::Planet(void)
+Planet::Planet( float radius, float karmanLine )
+    : Sphere( radius ), _atmosphere( radius, karmanLine )
 {
 }
 

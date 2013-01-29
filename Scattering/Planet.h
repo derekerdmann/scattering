@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Sphere.h"
 #include "Atmosphere.h"
 
 namespace Scattering {
 
 /* Represents a planet with an atmosphere */
-class Planet {
+class Planet : public Sphere {
 public:
 
     /* Constructor
