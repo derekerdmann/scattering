@@ -43,7 +43,8 @@ LRESULT Direct3DWindow::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return 0;
 }
 
+
 // Calculate the aspect ratio of the window
 float Direct3DWindow::aspectRatio() const {
-    return 0;
+	return static_cast<float>(_width) / _height;
 }
