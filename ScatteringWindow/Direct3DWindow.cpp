@@ -62,13 +62,98 @@ Direct3DWindow::~Direct3DWindow(void) {
 
 /* Main application loop */
 int Direct3DWindow::start() {
-    return 0;
+	MSG msg = {0};
+ 
+	while(msg.message != WM_QUIT) {
+
+		// If there are Window messages then process them.
+		if(PeekMessage( &msg, 0, 0, 0, PM_REMOVE )) {
+            TranslateMessage( &msg );
+            DispatchMessage( &msg );
+
+		// Otherwise, do animation/game stuff.
+		} else {	
+			if( !_paused ) {
+				updateScene();	
+				drawScene();
+			} else {
+				Sleep(100);
+			}
+        }
+    }
+
+	return (int) msg.wParam;
 }
 
 
 /* Handles resizing of the client window */
 void Direct3DWindow::onResize() {
 
+	assert( _d3dDeviceContext );
+	assert( _d3dDevice );
+	assert( _swapChain );
+
+	// Release the old views, as they hold references to the buffers we
+	// will be destroying.  Also release the old depth/stencil buffer.
+
+	Release( _renderTargetView );
+	Release( _depthStencilView );
+	Release( _depthStencilBuffer );
+
+
+	// Resize the swap chain and recreate the render target view.
+
+    HRESULT hr = S_OK;
+
+	hr = _swapChain->ResizeBuffers(1, _width, _height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+    assert( hr == S_OK );
+
+	ID3D11Texture2D* backBuffer;
+	hr = _swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
+    assert( hr == S_OK );
+
+	hr = _d3dDevice->CreateRenderTargetView(backBuffer, 0, &_renderTargetView);
+    assert( hr == S_OK );
+
+	Release( backBuffer );
+
+	// Create the depth/stencil buffer and view.
+
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	
+	depthStencilDesc.Width = _width;
+	depthStencilDesc.Height = _height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    depthStencilDesc.SampleDesc.Count = 1;
+    depthStencilDesc.SampleDesc.Quality = 0;
+
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0; 
+	depthStencilDesc.MiscFlags = 0;
+
+	hr = _d3dDevice->CreateTexture2D(&depthStencilDesc, 0, &_depthStencilBuffer);
+    assert( hr == S_OK );
+
+	hr = _d3dDevice->CreateDepthStencilView(_depthStencilBuffer, 0, &_depthStencilView);
+    assert( hr == S_OK );
+
+
+	// Bind the render target view and depth/stencil view to the pipeline.
+	_d3dDeviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+	
+
+	// Set the viewport transform.
+	_viewport.TopLeftX = 0;
+	_viewport.TopLeftY = 0;
+	_viewport.Width = static_cast<float>(_width);
+	_viewport.Height = static_cast<float>(_height);
+	_viewport.MinDepth = 0.0f;
+	_viewport.MaxDepth = 1.0f;
+
+	_d3dDeviceContext->RSSetViewports(1, &_viewport);
 }
 
 
@@ -80,7 +165,15 @@ void Direct3DWindow::updateScene() {
 
 /* Renders the current scene to the window */
 void Direct3DWindow::drawScene() {
+	assert( _d3dDeviceContext );
+	assert( _swapChain );
 
+	DirectX::XMVECTORF32 Blue = {0.0f, 0.0f, 8.0f, 1.0f};
+
+	_d3dDeviceContext->ClearRenderTargetView(_renderTargetView, reinterpret_cast<const float*>(&Blue));
+	_d3dDeviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	_swapChain->Present(0, 0);
 }
 
 
@@ -153,4 +246,75 @@ void Direct3DWindow::createWindow() {
 /* Initialize Direct3D objects */
 void Direct3DWindow::setupDirect3D() {
 
+	UINT createDeviceFlags = 0;
+#if defined(DEBUG) || defined(_DEBUG)  
+    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+	D3D_FEATURE_LEVEL featureLevel;
+	HRESULT hr = D3D11CreateDevice(
+        nullptr,
+        D3D_DRIVER_TYPE_HARDWARE,
+        nullptr,
+        createDeviceFlags, 
+        nullptr, 0, // Use whatever feature level is available
+        D3D11_SDK_VERSION,
+        &_d3dDevice,
+        &featureLevel,
+        &_d3dDeviceContext
+    );
+
+	assert( SUCCEEDED( hr ) );
+	assert( featureLevel == D3D_FEATURE_LEVEL_11_0 );
+
+	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
+	DXGI_SWAP_CHAIN_DESC sd;
+	sd.BufferDesc.Width  = _width;
+	sd.BufferDesc.Height = _height;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+    sd.SampleDesc.Count   = 1;
+    sd.SampleDesc.Quality = 0;
+
+	sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferCount  = 1;
+	sd.OutputWindow = _hwnd;
+	sd.Windowed     = true;
+	sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags        = 0;
+
+	// To correctly create the swap chain, we must use the IDXGIFactory that was
+	// used to create the device.  If we tried to use a different IDXGIFactory instance
+	// (by calling CreateDXGIFactory), we get an error: "IDXGIFactory::CreateSwapChain: 
+	// This function is being called with a device from a different IDXGIFactory."
+
+	IDXGIDevice* dxgiDevice = nullptr;
+	hr = S_OK;
+
+    hr = _d3dDevice->QueryInterface( IID_PPV_ARGS( &dxgiDevice ) );
+    assert( hr == S_OK );
+	      
+	IDXGIAdapter* dxgiAdapter = nullptr;
+	hr = dxgiDevice->GetParent( IID_PPV_ARGS( &dxgiAdapter ) );
+    assert( hr == S_OK );
+
+	IDXGIFactory* dxgiFactory = nullptr;
+	hr = dxgiAdapter->GetParent( IID_PPV_ARGS( &dxgiFactory) );
+    assert( hr == S_OK );
+
+	hr = dxgiFactory->CreateSwapChain( _d3dDevice, &sd, &_swapChain);
+    assert( hr == S_OK );
+	
+	Release( dxgiDevice );
+	Release( dxgiAdapter );
+	Release( dxgiFactory );
+
+	// The remaining steps that need to be carried out for d3d creation
+	// also need to be executed every time the window is resized.  So
+	// just call the OnResize method here to avoid code duplication.
+	
+	onResize();
 }
