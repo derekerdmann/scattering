@@ -6,14 +6,39 @@ using namespace Scattering;
 
 /* Constructor */
 Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
-    : _hinstance( hinstance )
+    : _hinstance( hinstance ),
+	  _d3dDevice( nullptr ),
+	  _d3dDeviceContext( nullptr ),
+	  _swapChain( nullptr ),
+	  _depthStencilBuffer( nullptr ),
+	  _renderTargetView( nullptr ),
+	  _depthStencilView( nullptr ),
+	  _paused( false ),
+      _minimized( false ),
+      _maximized( false ),
+      _resizing( false ),
+      _width( 800 ),
+      _height( 600 )
 {
 }
 
 
-/* Destructor */
-Direct3DWindow::~Direct3DWindow(void)
-{
+/* Destructor
+ * Release COM pointers in use
+ */
+Direct3DWindow::~Direct3DWindow(void) {
+	Release( _renderTargetView );
+	Release( _depthStencilView );
+	Release( _swapChain );
+	Release( _depthStencilBuffer );
+
+	// Restore all default settings.
+	if( _d3dDeviceContext ) {
+		_d3dDeviceContext->ClearState();
+    }
+
+	Release( _d3dDeviceContext );
+	Release( _d3dDevice );
 }
 
 
@@ -50,6 +75,15 @@ LRESULT Direct3DWindow::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 // Calculate the aspect ratio of the window
 float Direct3DWindow::aspectRatio() const {
 	return static_cast<float>(_width) / _height;
+}
+
+
+
+/* Releases a com pointer */
+inline void Release( IUnknown *object ) {
+    if( object ) {
+        object->Release();
+    }
 }
 
 
