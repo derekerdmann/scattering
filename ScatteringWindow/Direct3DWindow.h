@@ -8,7 +8,7 @@ class Direct3DWindow {
 public:
 
     /* Constructor */
-    Direct3DWindow(void);
+    Direct3DWindow(HINSTANCE hinstance);
 
     /* Destructor */
     ~Direct3DWindow(void);
