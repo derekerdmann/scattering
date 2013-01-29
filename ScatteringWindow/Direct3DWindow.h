@@ -13,15 +13,19 @@ public:
     /* Destructor */
     ~Direct3DWindow(void);
 	
-	int Run();
+    /* Main application loop */
+	int start();
  
-	// Framework methods.  Derived client class overrides these methods to 
-	// implement specific application requirements.
+    /* Handles resizing of the client window */
+	virtual void onResize(); 
 
-	virtual bool Init();
-	virtual void OnResize(); 
-	virtual void UpdateScene(float dt)=0;
-	virtual void DrawScene()=0; 
+    /* Updates the items in the scene at each tick */
+	virtual void updateScene();
+
+    /* Renders the current scene to the window */
+	virtual void drawScene(); 
+
+    /* Handle Windows window messages */
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     // Calculate the aspect ratio of the window
