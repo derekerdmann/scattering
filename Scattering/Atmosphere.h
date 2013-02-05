@@ -15,6 +15,16 @@ public:
      */
     Atmosphere( float planetRadius, float karmanLine );
     virtual ~Atmosphere(void);
+
+    /* Retrieve the effect technique */
+    virtual void storeEffectVariables();
+
+    // Sets up the vertex layout
+    virtual void createVertexLayout( ID3D11Device *d3dDevice );
+
+private:
+
+	ID3DX11EffectTechnique* _technique;
 };
 
 }

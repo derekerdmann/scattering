@@ -18,6 +18,12 @@ public:
     /* Destructor */
     virtual ~Planet(void);
 
+    /* Retrieve the effect technique */
+    virtual void storeEffectVariables();
+
+    // Sets up the vertex layout
+    virtual void createVertexLayout( ID3D11Device *d3dDevice );
+
 private:
 
     /* The planet's atmospheric shell */
@@ -28,6 +34,10 @@ private:
 
     /* The upper limit of the planet's atmosphere */
     float _karmanLine;
+
+
+	ID3DX11EffectTechnique* _technique;
+
 };
 
 }

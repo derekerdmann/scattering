@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Atmosphere.h" />
+    <ClInclude Include="D3DHelper.h" />
+    <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stdafx.h" />

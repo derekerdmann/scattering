@@ -21,3 +21,5 @@
 // TODO: reference additional headers your program requires here
 #include <DirectXMath.h>
 #include <d3d11.h>
+
+#include "D3DHelper.h"

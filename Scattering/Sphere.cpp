@@ -6,8 +6,13 @@ using namespace DirectX;
 using namespace Scattering;
 using namespace std;
 
-Sphere::Sphere( float radius )
-    : _r( radius )
+
+/* Constructor */
+Sphere::Sphere( float radius, wstring effectFileName )
+    : _r( radius ),
+      _vertexBuffer( nullptr ),
+      _indexBuffer( nullptr ),
+      _effectFile( effectFileName )
 {
 	const float X = 0.525731f; 
 	const float Z = 0.850651f;
@@ -41,10 +46,98 @@ Sphere::Sphere( float radius )
         _indices[i] = indices[i];
     }
     
+}
+
+
+/* Destructor */
+Sphere::~Sphere(void) {
+    if( _vertexBuffer ) _vertexBuffer->Release();
+    if( _indexBuffer ) _indexBuffer->Release();
+}
+
+
+/* Create a buffer for the shape */
+void Sphere::createBuffer( ID3D11Device *d3dDevice ) {
     
+    D3D11_BUFFER_DESC vbd;
+    vbd.Usage = D3D11_USAGE_IMMUTABLE;
+    vbd.ByteWidth = sizeof( Vertex ) * static_cast<UINT>( _vertices.size() );
+    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    vbd.CPUAccessFlags = 0;
+    vbd.MiscFlags = 0;
+    vbd.StructureByteStride = 0;
+    
+    D3D11_SUBRESOURCE_DATA vinitData;
+    vinitData.pSysMem = &_vertices[0];
+    d3dDevice->CreateBuffer( &vbd, &vinitData, &_vertexBuffer );
+    
+    D3D11_BUFFER_DESC ibd;
+    ibd.Usage = D3D11_USAGE_IMMUTABLE;
+    ibd.ByteWidth = sizeof( UINT ) * static_cast<UINT>( _indices.size() );
+    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    ibd.CPUAccessFlags = 0;
+    ibd.MiscFlags = 0;
+    ibd.StructureByteStride = 0;
+    
+    D3D11_SUBRESOURCE_DATA iinitData;
+    iinitData.pSysMem = &_indices[0];
+    d3dDevice->CreateBuffer( &ibd, &iinitData, &_indexBuffer );
 }
 
 
-Sphere::~Sphere(void)
-{
+
+/* Compiles the shape's effect from file and creates the effect pointer */
+void Sphere::compileEffect( ID3D11Device *d3dDevice ) {
+
+	UINT shaderFlags = 0;
+
+#if defined( DEBUG ) || defined( _DEBUG )
+    shaderFlags |= D3D10_SHADER_DEBUG;
+	shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
+#endif
+ 
+	ID3D10Blob *compiledShader = nullptr;
+	ID3D10Blob *compileMessages = nullptr;
+
+	HRESULT hr = D3DCompileFromFile(
+        _effectFile.c_str(),
+        nullptr,
+        nullptr,
+        0, 
+        "fx_5_0",
+        shaderFlags,
+        0,
+        &compiledShader,
+        &compileMessages 
+    );
+
+	// compilationMsgs can store errors or warnings.
+	if( compileMessages ) {
+        MessageBoxA( 0, (char*) compileMessages->GetBufferPointer(), 0, 0 );
+        Release( compileMessages );
+	}
+
+    assert( SUCCEEDED( hr ) );
+
+	hr = D3DX11CreateEffectFromMemory(
+        compiledShader->GetBufferPointer(),
+        compiledShader->GetBufferSize(), 
+		0,
+        d3dDevice,
+        &_fx
+    );
+
+	// Done with compiled shader.
+	Release( compiledShader );
+
+    // Allow subclasses to get whatever variables they need from the effect
+    storeEffectVariables();
 }
+
+/* Allows subclasses to retrieve any necessary effect variables once the effect
+ * has been compiled. By default, no op
+ */
+void Sphere::storeEffectVariables() { }
+
+
+

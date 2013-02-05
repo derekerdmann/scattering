@@ -33,9 +33,6 @@ public:
 
 private:
 
-    /* Releases a com pointer */
-    inline void Release( IUnknown *object );
-
     /* Initialize the main application window */
     void createWindow();
 

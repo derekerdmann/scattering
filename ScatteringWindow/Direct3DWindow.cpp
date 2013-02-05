@@ -106,14 +106,14 @@ void Direct3DWindow::onResize() {
     HRESULT hr = S_OK;
 
 	hr = _swapChain->ResizeBuffers(1, _width, _height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	ID3D11Texture2D* backBuffer;
 	hr = _swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	hr = _d3dDevice->CreateRenderTargetView(backBuffer, 0, &_renderTargetView);
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	Release( backBuffer );
 
@@ -135,10 +135,10 @@ void Direct3DWindow::onResize() {
 	depthStencilDesc.MiscFlags = 0;
 
 	hr = _d3dDevice->CreateTexture2D(&depthStencilDesc, 0, &_depthStencilBuffer);
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	hr = _d3dDevice->CreateDepthStencilView(_depthStencilBuffer, 0, &_depthStencilView);
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 
 	// Bind the render target view and depth/stencil view to the pipeline.
@@ -168,10 +168,21 @@ void Direct3DWindow::drawScene() {
 	assert( _d3dDeviceContext );
 	assert( _swapChain );
 
-	DirectX::XMVECTORF32 Blue = {0.0f, 0.0f, 8.0f, 1.0f};
+	DirectX::XMVECTORF32 Background = {0.0f, 0.0f, 0.0f, 1.0f};
 
-	_d3dDeviceContext->ClearRenderTargetView(_renderTargetView, reinterpret_cast<const float*>(&Blue));
-	_d3dDeviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	_d3dDeviceContext->ClearRenderTargetView(
+        _renderTargetView,
+        reinterpret_cast<const float*>(&Background)
+    );
+
+	_d3dDeviceContext->ClearDepthStencilView(
+        _depthStencilView,
+        D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+        1.0f,
+        0
+    );
+
+
 
 	_swapChain->Present(0, 0);
 }
@@ -186,15 +197,6 @@ LRESULT Direct3DWindow::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 // Calculate the aspect ratio of the window
 float Direct3DWindow::aspectRatio() const {
 	return static_cast<float>(_width) / _height;
-}
-
-
-
-/* Releases a com pointer */
-inline void Direct3DWindow::Release( IUnknown *object ) {
-    if( object ) {
-        object->Release();
-    }
 }
 
 
@@ -236,7 +238,7 @@ void Direct3DWindow::createWindow() {
 
     HRESULT hr = HRESULT_FROM_WIN32( GetLastError() );
 
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	ShowWindow(_hwnd, SW_SHOW);
 	UpdateWindow(_hwnd);
@@ -295,18 +297,18 @@ void Direct3DWindow::setupDirect3D() {
 	hr = S_OK;
 
     hr = _d3dDevice->QueryInterface( IID_PPV_ARGS( &dxgiDevice ) );
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 	      
 	IDXGIAdapter* dxgiAdapter = nullptr;
 	hr = dxgiDevice->GetParent( IID_PPV_ARGS( &dxgiAdapter ) );
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	IDXGIFactory* dxgiFactory = nullptr;
 	hr = dxgiAdapter->GetParent( IID_PPV_ARGS( &dxgiFactory) );
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 
 	hr = dxgiFactory->CreateSwapChain( _d3dDevice, &sd, &_swapChain);
-    assert( hr == S_OK );
+    assert( SUCCEEDED( hr ) );
 	
 	Release( dxgiDevice );
 	Release( dxgiAdapter );
