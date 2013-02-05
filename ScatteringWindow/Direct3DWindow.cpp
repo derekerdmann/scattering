@@ -330,5 +330,5 @@ void Direct3DWindow::setupDirect3D() {
 
 /* Set the scene */
 void Direct3DWindow::setScene() {
-    _planet.compileEffect( _d3dDevice );
+    _planet.setupShaders( _d3dDevice, _d3dDeviceContext );
 }

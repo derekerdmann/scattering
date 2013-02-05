@@ -32,15 +32,11 @@ public:
     /* Initializes the vertex and index buffers */
     virtual void createBuffer( ID3D11Device *d3dDevice );
 
-    /* Compiles the shape's effect from file and creates the effect pointer */
-    virtual void compileEffect( ID3D11Device *d3dDevice );
-
-    /* Allows subclasses to retrieve any necessary effect variables once the
-     * effect has been compiled */
-    virtual void storeEffectVariables();
-
-    /* Initializes the vertex layout */
-    virtual void createVertexLayout( ID3D11Device *d3dDevice ) = 0;
+    // Sets up the shaders for the object
+    virtual void setupShaders(
+        ID3D11Device *d3dDevice, 
+        ID3D11DeviceContext* d3dDeviceContext
+    ) = 0;
 
 protected:
     /* compiled DirectX11 effect */
