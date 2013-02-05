@@ -36,6 +36,7 @@ private:
     float _karmanLine;
 
 
+	ID3D11InputLayout* _inputLayout;
 	ID3DX11EffectTechnique* _technique;
 
 };

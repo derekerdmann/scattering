@@ -24,6 +24,7 @@ public:
 
 private:
 
+	ID3D11InputLayout* _inputLayout;
 	ID3DX11EffectTechnique* _technique;
 };
 

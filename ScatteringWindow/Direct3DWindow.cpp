@@ -40,6 +40,8 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
 
     createWindow();
     setupDirect3D();
+
+    setScene();
 }
 
 
@@ -323,4 +325,10 @@ void Direct3DWindow::setupDirect3D() {
 	// just call the OnResize method here to avoid code duplication.
 	
 	onResize();
+}
+
+
+/* Set the scene */
+void Direct3DWindow::setScene() {
+    _planet.compileEffect( _d3dDevice );
 }

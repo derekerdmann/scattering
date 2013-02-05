@@ -31,4 +31,14 @@ void Atmosphere::createVertexLayout( ID3D11Device *d3dDevice ) {
     // Build the actual vertex layout
     D3DX11_PASS_DESC passDesc;
     _technique->GetPassByIndex(0)->GetDesc(&passDesc);
+
+	HRESULT hr = d3dDevice->CreateInputLayout(
+        vertexDesc, 
+        2, 
+        passDesc.pIAInputSignature, 
+		passDesc.IAInputSignatureSize, 
+        &_inputLayout
+    );
+
+    assert( SUCCEEDED( hr ) );
 }

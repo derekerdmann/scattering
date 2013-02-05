@@ -40,6 +40,9 @@ private:
     /* Initialize Direct3D objects */
     void setupDirect3D();
 
+    /* Initializes the scene objects */
+    void setScene();
+
 	HINSTANCE _hinstance;
 	HWND _hwnd;
 
