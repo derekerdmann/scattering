@@ -13,13 +13,14 @@ cbuffer cbPerObject
 
 struct VertexIn
 {
-	float3 PosL  : POSITION;
+	float3 PosL : POSITION;
+	float3 Normal : NORMAL;
     float4 Color : COLOR;
 };
 
 struct VertexOut
 {
-	float4 PosH  : SV_POSITION;
+	float4 PosH : SV_POSITION;
     float4 Color : COLOR;
 };
 

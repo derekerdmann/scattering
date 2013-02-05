@@ -13,13 +13,14 @@ cbuffer cbPerObject
 
 struct VertexIn
 {
-	float3 PosL  : POSITION;
+	float3 PosL : POSITION;
+	float3 Normal : NORMAL;
     float4 Color : COLOR;
 };
 
 struct VertexOut
 {
-	float4 PosH  : SV_POSITION;
+	float4 PosH : SV_POSITION;
     float4 Color : COLOR;
 };
 
@@ -49,7 +50,4 @@ technique11 ColorTech
 		SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_5_0, PS() ) );
     }
-}
-{
-	return pos;
 }

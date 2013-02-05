@@ -59,11 +59,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="planet.fx">
+    <CustomBuild Include="planet.fx">
       <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="atmosphere.fx">
+    </CustomBuild>
+    <CustomBuild Include="atmosphere.fx">
       <Filter>Shaders</Filter>
-    </FxCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>

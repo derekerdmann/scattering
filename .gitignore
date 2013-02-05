@@ -25,3 +25,5 @@ TestResults/
 *.vspx
 Release/
 *.psess
+
+*.cod

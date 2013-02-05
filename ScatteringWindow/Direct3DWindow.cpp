@@ -32,7 +32,9 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _maximized( false ),
       _resizing( false ),
       _width( 800 ),
-      _height( 600 )
+      _height( 600 ),
+      // Planet sizes given in meters
+      _planet( 6371000, 100000 )
 {
     window = this;
 

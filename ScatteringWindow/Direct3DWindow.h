@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "Planet.h"
 
 namespace Scattering {
 
@@ -56,6 +57,8 @@ private:
 
 	int _width;
 	int _height;
+
+    Planet _planet;
 };
 
 }
