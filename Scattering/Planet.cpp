@@ -5,7 +5,7 @@ using namespace DirectX;
 using namespace Scattering;
 
 Planet::Planet( float radius, float karmanLine )
-    : Sphere( radius, L"FX/planet.fx" ), _atmosphere( radius, karmanLine )
+    : Sphere( radius, L"planet.fx" ), _atmosphere( radius, karmanLine )
 {
 }
 
@@ -14,6 +14,11 @@ Planet::~Planet(void)
 {
 }
 
+
+/* Retrieve the effect technique */
+void Planet::storeEffectVariables() {
+	_technique = _fx->GetTechniqueByName("ColorTech");
+}
 
 /* Initializes the vertex layout */
 void Planet::createVertexLayout( ID3D11Device *d3dDevice ) {

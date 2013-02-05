@@ -5,11 +5,17 @@ using namespace DirectX;
 using namespace Scattering;
 
 Atmosphere::Atmosphere( float planetRadius, float karmanLine )
-    : Sphere( planetRadius + karmanLine, L"FX/Atmosphere.fx" )
+    : Sphere( planetRadius + karmanLine, L"atmosphere.fx" )
 {
 }
 
 
 Atmosphere::~Atmosphere(void)
 {
+}
+
+
+/* Retrieve the effect technique */
+void Atmosphere::storeEffectVariables() {
+	_technique = _fx->GetTechniqueByName("ColorTech");
 }
