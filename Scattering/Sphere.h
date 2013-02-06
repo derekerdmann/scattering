@@ -7,16 +7,9 @@ namespace Scattering {
 
 /* Records single points for a shape vertex */
 struct Vertex {
-    Vertex( const DirectX::XMFLOAT3& pos )
-        : color( 0, 0, 0 )
-    {
-        DirectX::XMVECTOR n = DirectX::XMVector3Normalize(XMLoadFloat3(&pos));
-        XMStoreFloat3( &normal, n );
-    }
-
     DirectX::XMFLOAT3 position;
     DirectX::XMFLOAT3 normal;
-    DirectX::XMFLOAT3 color;
+    DirectX::XMFLOAT4 color;
 };
 
 /* Generates points for a sphere */
@@ -31,6 +24,12 @@ public:
 
     /* Initializes the vertex and index buffers */
     virtual void createBuffer( ID3D11Device *d3dDevice );
+
+    /* Returns the vertex buffer */
+    virtual ID3D11Buffer **getVertexBuffer();
+
+    /* Returns the index buffer */
+    virtual ID3D11Buffer *getIndexBuffer();
 
     // Sets up the shaders for the object
     virtual void setupShaders(

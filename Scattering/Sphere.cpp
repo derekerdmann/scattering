@@ -26,12 +26,13 @@ Sphere::Sphere( float radius, wstring effectFileName )
 		XMFLOAT3(Z, -X, 0.0f),  XMFLOAT3(-Z, -X, 0.0f)
 	};
 
-    for( unsigned int i = 0; i < 12; ++i ){
-        _vertices.push_back( points[i] );
+    _vertices.resize( ARRAYSIZE( points ) );
+    for( unsigned int i = 0; i < ARRAYSIZE( points ); ++i ){
         XMVECTOR n = XMVector3Normalize( XMLoadFloat3( &points[i] ) );
         XMVECTOR p = _r * n;
         XMStoreFloat3( &_vertices[i].normal, n );
         XMStoreFloat3( &_vertices[i].position, p );
+        _vertices[i].color = XMFLOAT4( 0, 0, 0, 0 );
     }
 
 	unsigned int indices[60] = {
@@ -41,8 +42,8 @@ Sphere::Sphere( float radius, wstring effectFileName )
 		10,1,6, 11,0,9, 2,11,9, 5,2,9,  11,2,7 
 	};
 
-	_indices.resize(60);
-    for( unsigned int i = 0; i < 60; ++i ){
+	_indices.resize( ARRAYSIZE( indices ) );
+    for( unsigned int i = 0; i < ARRAYSIZE( indices ); ++i ){
         _indices[i] = indices[i];
     }
     
@@ -82,4 +83,15 @@ void Sphere::createBuffer( ID3D11Device *d3dDevice ) {
     D3D11_SUBRESOURCE_DATA iinitData;
     iinitData.pSysMem = &_indices[0];
     d3dDevice->CreateBuffer( &ibd, &iinitData, &_indexBuffer );
+}
+
+
+/* Returns the vertex buffer */
+ID3D11Buffer **Sphere::getVertexBuffer() {
+    return &_vertexBuffer;
+}
+
+/* Returns the index buffer */
+ID3D11Buffer *Sphere::getIndexBuffer() {
+    return _indexBuffer;
 }

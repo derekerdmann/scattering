@@ -2,6 +2,7 @@
 #include "Direct3DWindow.h"
 
 using namespace Scattering;
+using namespace DirectX;
 
 namespace {
 
@@ -164,7 +165,12 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
+	XMVECTOR pos = XMVectorSet( 0, 0, -2, 1.0f );
+	XMVECTOR target = XMVectorZero();
+	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
+	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	XMStoreFloat4x4(&_view, V);
 
 }
 
@@ -188,7 +194,7 @@ void Direct3DWindow::drawScene() {
         0
     );
 
-
+    _planet.draw( _d3dDevice, _d3dDeviceContext, &_view );
 
 	_swapChain->Present(0, 0);
 }
@@ -330,5 +336,6 @@ void Direct3DWindow::setupDirect3D() {
 
 /* Set the scene */
 void Direct3DWindow::setScene() {
+    _planet.createBuffer( _d3dDevice );
     _planet.setupShaders( _d3dDevice, _d3dDeviceContext );
 }

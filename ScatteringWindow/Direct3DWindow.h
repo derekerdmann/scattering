@@ -62,6 +62,8 @@ private:
 	int _height;
 
     Planet _planet;
+
+    DirectX::XMFLOAT4X4 _view;
 };
 
 }

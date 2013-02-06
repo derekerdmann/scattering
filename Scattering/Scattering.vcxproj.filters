@@ -59,14 +59,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="planet.fx">
-      <Filter>Shaders</Filter>
-    </CustomBuild>
-    <CustomBuild Include="atmosphere.fx">
-      <Filter>Shaders</Filter>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="PlanetVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
