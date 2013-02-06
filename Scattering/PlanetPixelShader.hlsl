@@ -1,4 +1,6 @@
-float4 main() : SV_TARGET
+#include "Structures.hlsli"
+
+float4 main( in VS_OUTPUT input ) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    return input.Color;
 }

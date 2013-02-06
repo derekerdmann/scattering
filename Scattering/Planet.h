@@ -27,8 +27,7 @@ public:
     /* Draws the planet on the screen */
     void draw(
         ID3D11Device *d3dDevice,
-        ID3D11DeviceContext *d3dDeviceContext,
-        DirectX::XMFLOAT4X4 *view
+        ID3D11DeviceContext *d3dDeviceContext
     );
 
 private:

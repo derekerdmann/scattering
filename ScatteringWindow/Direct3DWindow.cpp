@@ -35,7 +35,8 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _width( 800 ),
       _height( 600 ),
       // Planet sizes given in meters
-      _planet( 6371000, 100000 )
+      _planet( 1, 1 )
+      //_planet( 6371000, 100000 )
 {
     window = this;
 
@@ -165,7 +166,7 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-	XMVECTOR pos = XMVectorSet( 0, 0, -2, 1.0f );
+	XMVECTOR pos = XMVectorSet( 0, 0, -5, 1 );
 	XMVECTOR target = XMVectorZero();
 	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
@@ -180,7 +181,7 @@ void Direct3DWindow::drawScene() {
 	assert( _d3dDeviceContext );
 	assert( _swapChain );
 
-	DirectX::XMVECTORF32 Background = {0.0f, 0.0f, 0.0f, 1.0f};
+	DirectX::XMVECTORF32 Background = {0.0f, 0.0f, 1.0f, 1.0f};
 
 	_d3dDeviceContext->ClearRenderTargetView(
         _renderTargetView,
@@ -194,7 +195,45 @@ void Direct3DWindow::drawScene() {
         0
     );
 
-    _planet.draw( _d3dDevice, _d3dDeviceContext, &_view );
+	// Set constants
+	XMMATRIX world = XMMatrixIdentity();
+	XMMATRIX view  = XMLoadFloat4x4( &_view );
+	XMMATRIX proj  = XMMatrixIdentity();
+	XMMATRIX worldViewProj = world * view * proj;
+
+    XMFLOAT4X4 wvp;
+    XMStoreFloat4x4( &wvp, worldViewProj );
+
+    // Fill in a buffer description.
+    D3D11_BUFFER_DESC cbDesc;
+    cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbDesc.MiscFlags = 0;
+    cbDesc.StructureByteStride = 0;
+
+    // Fill in the subresource data.
+    D3D11_SUBRESOURCE_DATA data;
+    data.pSysMem = &wvp;
+    data.SysMemPitch = 0;
+    data.SysMemSlicePitch = 0;
+
+    // Create the buffer.
+    ID3D11Buffer *constantBuffer = nullptr;
+    HRESULT hr = _d3dDevice->CreateBuffer(
+        &cbDesc,
+        &data,
+        &constantBuffer
+    );
+
+    assert( SUCCEEDED( hr ) );
+
+    // Set the buffer.
+    _d3dDeviceContext->VSSetConstantBuffers( 0, 1, &constantBuffer );
+    Release( constantBuffer );
+
+    _planet.draw( _d3dDevice, _d3dDeviceContext );
 
 	_swapChain->Present(0, 0);
 }

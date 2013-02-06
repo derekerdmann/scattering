@@ -32,7 +32,7 @@ Sphere::Sphere( float radius, wstring effectFileName )
         XMVECTOR p = _r * n;
         XMStoreFloat3( &_vertices[i].normal, n );
         XMStoreFloat3( &_vertices[i].position, p );
-        _vertices[i].color = XMFLOAT4( 0, 0, 0, 0 );
+        _vertices[i].color = XMFLOAT4( 1, 0, 0, 1 );
     }
 
 	unsigned int indices[60] = {
