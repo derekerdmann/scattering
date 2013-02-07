@@ -154,14 +154,14 @@ void Direct3DWindow::onResize() {
     D3D11_RASTERIZER_DESC rasterDesc;
     rasterDesc.AntialiasedLineEnable = false;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
-	rasterDesc.DepthBias = 0;
-	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
+	rasterDesc.DepthBias = false;
+	rasterDesc.DepthBiasClamp = 0;
+	rasterDesc.DepthClipEnable = false;
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise = true;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
-	rasterDesc.SlopeScaledDepthBias = 0.0f;
+	rasterDesc.SlopeScaledDepthBias = 0;
 
     hr = _d3dDevice->CreateRasterizerState( &rasterDesc, &_rasterState );
     assert( SUCCEEDED( hr ) );
@@ -174,8 +174,8 @@ void Direct3DWindow::onResize() {
 	_viewport.TopLeftY = 0;
 	_viewport.Width = static_cast<float>(_width);
 	_viewport.Height = static_cast<float>(_height);
-	_viewport.MinDepth = 0.0f;
-	_viewport.MaxDepth = 1.0f;
+	_viewport.MinDepth = 0;
+	_viewport.MaxDepth = 1;
 
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
 
@@ -188,7 +188,7 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-	XMVECTOR pos = XMVectorSet( 0, 5, -5, 1 );
+	XMVECTOR pos = XMVectorSet( 0, 0, -5, 1 );
 	XMVECTOR target = XMVectorSet( 0, 0, 0, 1 );
 	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
