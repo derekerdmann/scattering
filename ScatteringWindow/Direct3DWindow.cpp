@@ -151,22 +151,22 @@ void Direct3DWindow::onResize() {
 	_d3dDeviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 
     // TODO - figure out if this is needed
- //   D3D11_RASTERIZER_DESC rasterDesc;
- //   rasterDesc.AntialiasedLineEnable = false;
-	//rasterDesc.CullMode = D3D11_CULL_BACK;
-	//rasterDesc.DepthBias = 0;
-	//rasterDesc.DepthBiasClamp = 0.0f;
-	//rasterDesc.DepthClipEnable = true;
-	//rasterDesc.FillMode = D3D11_FILL_SOLID;
-	//rasterDesc.FrontCounterClockwise = false;
-	//rasterDesc.MultisampleEnable = false;
-	//rasterDesc.ScissorEnable = false;
-	//rasterDesc.SlopeScaledDepthBias = 0.0f;
+    D3D11_RASTERIZER_DESC rasterDesc;
+    rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = true;
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
- //   hr = _d3dDevice->CreateRasterizerState( &rasterDesc, &_rasterState );
- //   assert( SUCCEEDED( hr ) );
+    hr = _d3dDevice->CreateRasterizerState( &rasterDesc, &_rasterState );
+    assert( SUCCEEDED( hr ) );
 
- //   _d3dDeviceContext->RSSetState( _rasterState );
+    _d3dDeviceContext->RSSetState( _rasterState );
 	
 
 	// Set the viewport transform.
@@ -188,8 +188,8 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-	XMVECTOR pos = XMVectorSet( 0, 0, -5, 1 );
-	XMVECTOR target = XMVectorZero();
+	XMVECTOR pos = XMVectorSet( 0, 5, -5, 1 );
+	XMVECTOR target = XMVectorSet( 0, 0, 0, 1 );
 	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
 	XMMATRIX V = XMMatrixLookAtLH( pos, target, up );
@@ -203,7 +203,7 @@ void Direct3DWindow::drawScene() {
 	assert( _d3dDeviceContext );
 	assert( _swapChain );
 
-	DirectX::XMVECTORF32 Background = {0.0f, 0.0f, 1.0f, 1.0f};
+	DirectX::XMVECTORF32 Background = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	_d3dDeviceContext->ClearRenderTargetView(
         _renderTargetView,
