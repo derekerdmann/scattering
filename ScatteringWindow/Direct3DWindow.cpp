@@ -32,7 +32,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _minimized( false ),
       _maximized( false ),
       _resizing( false ),
-      _width( 800 ),
+      _width( 600 ),
       _height( 600 ),
       // Planet sizes given in meters
       _planet( 1, 1 )
@@ -157,7 +157,7 @@ void Direct3DWindow::onResize() {
 	rasterDesc.DepthBias = false;
 	rasterDesc.DepthBiasClamp = 0;
 	rasterDesc.DepthClipEnable = false;
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
+    rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rasterDesc.FrontCounterClockwise = true;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
@@ -180,7 +180,8 @@ void Direct3DWindow::onResize() {
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*XM_PI, aspectRatio(), 1.0f, 1000.0f);
+    XMMATRIX P = XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatio(), 1.0f, 1000.0f);
+    P = XMMatrixOrthographicLH( 8, 8, 1, 100 );
 	XMStoreFloat4x4(&_proj, P);
 }
 
@@ -188,7 +189,7 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-	XMVECTOR pos = XMVectorSet( 0, 0, -5, 1 );
+	XMVECTOR pos = XMVectorSet( 5, 0, -5, 1 );
 	XMVECTOR target = XMVectorSet( 0, 0, 0, 1 );
 	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
