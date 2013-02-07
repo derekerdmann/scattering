@@ -35,7 +35,7 @@ Sphere::Sphere( float radius, wstring effectFileName )
         _vertices[i].color = XMFLOAT4( 1, 0, 0, 1 );
     }
 
-	unsigned int indices[60] = {
+	UINT indices[60] = {
 		1,4,0,  4,9,0,  4,5,9,  8,5,4,  1,8,4,    
 		1,10,8, 10,3,8, 8,3,5,  3,2,5,  3,7,2,    
 		3,10,7, 10,6,7, 6,11,7, 6,0,11, 6,1,0, 
@@ -82,7 +82,8 @@ void Sphere::createBuffer( ID3D11Device *d3dDevice ) {
     
     D3D11_SUBRESOURCE_DATA iinitData;
     iinitData.pSysMem = &_indices[0];
-    d3dDevice->CreateBuffer( &ibd, &iinitData, &_indexBuffer );
+    HRESULT hr = d3dDevice->CreateBuffer( &ibd, &iinitData, &_indexBuffer );
+    assert( SUCCEEDED( hr ) );
 }
 
 

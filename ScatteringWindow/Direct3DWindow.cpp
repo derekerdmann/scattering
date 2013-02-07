@@ -149,6 +149,24 @@ void Direct3DWindow::onResize() {
 
 	// Bind the render target view and depth/stencil view to the pipeline.
 	_d3dDeviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+
+    // TODO - figure out if this is needed
+ //   D3D11_RASTERIZER_DESC rasterDesc;
+ //   rasterDesc.AntialiasedLineEnable = false;
+	//rasterDesc.CullMode = D3D11_CULL_BACK;
+	//rasterDesc.DepthBias = 0;
+	//rasterDesc.DepthBiasClamp = 0.0f;
+	//rasterDesc.DepthClipEnable = true;
+	//rasterDesc.FillMode = D3D11_FILL_SOLID;
+	//rasterDesc.FrontCounterClockwise = false;
+	//rasterDesc.MultisampleEnable = false;
+	//rasterDesc.ScissorEnable = false;
+	//rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+ //   hr = _d3dDevice->CreateRasterizerState( &rasterDesc, &_rasterState );
+ //   assert( SUCCEEDED( hr ) );
+
+ //   _d3dDeviceContext->RSSetState( _rasterState );
 	
 
 	// Set the viewport transform.
@@ -160,6 +178,10 @@ void Direct3DWindow::onResize() {
 	_viewport.MaxDepth = 1.0f;
 
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
+
+	// The window resized, so update the aspect ratio and recompute the projection matrix.
+	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*XM_PI, aspectRatio(), 1.0f, 1000.0f);
+	XMStoreFloat4x4(&_proj, P);
 }
 
 
@@ -170,7 +192,7 @@ void Direct3DWindow::updateScene() {
 	XMVECTOR target = XMVectorZero();
 	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	XMMATRIX V = XMMatrixLookAtLH( pos, target, up );
 	XMStoreFloat4x4(&_view, V);
 
 }
@@ -198,7 +220,7 @@ void Direct3DWindow::drawScene() {
 	// Set constants
 	XMMATRIX world = XMMatrixIdentity();
 	XMMATRIX view  = XMLoadFloat4x4( &_view );
-	XMMATRIX proj  = XMMatrixIdentity();
+	XMMATRIX proj  = XMLoadFloat4x4( &_proj );
 	XMMATRIX worldViewProj = world * view * proj;
 
     XMFLOAT4X4 wvp;

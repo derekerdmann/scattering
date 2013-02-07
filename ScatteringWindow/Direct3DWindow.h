@@ -57,13 +57,14 @@ private:
 	ID3D11RenderTargetView* _renderTargetView;
 	ID3D11DepthStencilView* _depthStencilView;
 	D3D11_VIEWPORT _viewport;
+    ID3D11RasterizerState *_rasterState;
 
 	int _width;
 	int _height;
 
     Planet _planet;
 
-    DirectX::XMFLOAT4X4 _view;
+    DirectX::XMFLOAT4X4 _view, _proj;
 };
 
 }

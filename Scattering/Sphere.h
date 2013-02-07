@@ -43,7 +43,7 @@ protected:
 
 private:
     std::vector<Vertex> _vertices;
-    std::vector<unsigned int> _indices;
+    std::vector<UINT> _indices;
 
     ID3D11Buffer *_vertexBuffer;
     ID3D11Buffer *_indexBuffer;

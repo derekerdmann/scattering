@@ -80,14 +80,14 @@ void Planet::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContex
 
     d3dDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    d3dDeviceContext->IASetVertexBuffers(0, 1, getVertexBuffer(), &stride, &offset);
 	d3dDeviceContext->IASetIndexBuffer(getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+    d3dDeviceContext->IASetVertexBuffers(0, 1, getVertexBuffer(), &stride, &offset);
 
     d3dDeviceContext->IASetInputLayout( _inputLayout );
 
-    d3dDeviceContext->VSSetShader( _vertexShader, nullptr, 0 );
     d3dDeviceContext->PSSetShader( _pixelShader, nullptr, 0 );
+    d3dDeviceContext->VSSetShader( _vertexShader, nullptr, 0 );
 
-    d3dDeviceContext->DrawAuto();
+    d3dDeviceContext->DrawIndexed(60, 0, 0);
 
 }
