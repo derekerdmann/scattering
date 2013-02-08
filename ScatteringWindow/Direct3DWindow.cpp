@@ -37,7 +37,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in meters
       _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 5, 0, 0 ), XMFLOAT3( 0, 0, 0 ) ),
+      _camera( XMFLOAT3( 3, 0, 0 ), XMFLOAT3( 0, 0, 0 ) ),
       _lastMousePosition( 0, 0 )
 {
     window = this;
@@ -182,9 +182,8 @@ void Direct3DWindow::onResize() {
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-    XMMATRIX P = XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatio(), 1.0f, 1000.0f);
-    P = XMMatrixOrthographicLH( 3, 3, 1, 100 );
-	XMStoreFloat4x4(&_proj, XMMatrixTranspose( P ) );
+    XMMATRIX P = XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio(), 1.0f, 1000.0f );
+	XMStoreFloat4x4(&_proj, P );
 }
 
 
