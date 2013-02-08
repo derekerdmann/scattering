@@ -7,8 +7,15 @@ namespace Scattering {
 class Camera {
 public:
 
-    /* Default up vector for all cameras */
+    /* Default position vector */
+    static const DirectX::XMVECTOR Camera::DEFAULT_POSITION;
+
+    /* Default lookAt vector */
+    static const DirectX::XMVECTOR Camera::DEFAULT_LOOKAT;
+
+    /* Default up vector */
     static const DirectX::XMVECTOR Camera::DEFAULT_UP;
+
 
     /* Default constructor, defaults position to [0 0 0], lookAt to [0 0 1] */
     Camera();

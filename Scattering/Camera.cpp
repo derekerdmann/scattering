@@ -4,13 +4,16 @@
 using namespace Scattering;
 using namespace DirectX;
 
+
+const XMVECTOR Camera::DEFAULT_POSITION = XMVectorSet( 0, 0, 0, 0 );
+const XMVECTOR Camera::DEFAULT_LOOKAT = XMVectorSet( 0, 0, 0, 0 );
 const XMVECTOR Camera::DEFAULT_UP = XMVectorSet( 0, 1, 0, 0 );
 
 
 /* Constructor */
 Camera::Camera()
-    : _position( XMVectorZero() ),
-      _lookAt( XMVectorSet( 0, 0, 1, 0 ) ),
+    : _position( DEFAULT_POSITION ),
+      _lookAt( DEFAULT_LOOKAT ),
       _up( DEFAULT_UP )
 { }
 
