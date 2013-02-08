@@ -37,7 +37,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in meters
       _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 3, 0, 0 ), XMFLOAT3( 0, 0, 0 ) ),
+      _camera( XMFLOAT3( 0, 1.5, 0 ), XMFLOAT3( 0, 0, 0 ) ),
       _lastMousePosition( 0, 0 )
 {
     window = this;
@@ -182,7 +182,7 @@ void Direct3DWindow::onResize() {
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-    XMMATRIX P = XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio(), 1.0f, 1000.0f );
+    XMMATRIX P = XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio(), 0.1f, 1000.0f );
 	XMStoreFloat4x4(&_proj, P );
 }
 
@@ -280,8 +280,8 @@ void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
 	if( (buttonState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-        float dx = 0.025f * static_cast<float>( x - _lastMousePosition.x );
-		float dy = 0.025f * static_cast<float>( y - _lastMousePosition.y );
+        float dx = 0.0025f * static_cast<float>( x - _lastMousePosition.x );
+		float dy = 0.0025f * static_cast<float>( y - _lastMousePosition.y );
 
 		_camera.pitchDegrees(dy);
         _camera.yawDegrees(dx);
