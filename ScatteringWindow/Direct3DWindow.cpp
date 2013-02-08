@@ -37,7 +37,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in meters
       _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 0, 0, 5 ), XMFLOAT3( 0, 0, 0 ) )
+      _camera( XMFLOAT3( 5, 0, 0 ), XMFLOAT3( 0, 0, 0 ) )
 {
     window = this;
 
@@ -158,7 +158,7 @@ void Direct3DWindow::onResize() {
 	rasterDesc.DepthBias = false;
 	rasterDesc.DepthBiasClamp = 0;
 	rasterDesc.DepthClipEnable = false;
-    rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+    rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise = true;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
