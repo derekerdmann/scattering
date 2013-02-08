@@ -38,7 +38,7 @@ void Camera::pitch( float dy ) {
 
 /* Changes the pitch of the camera by the specified delta in degrees */
 void Camera::pitchDegrees( float dy ) {
-    applyTransformation( XMMatrixRotationY( dy ) );
+    applyTransformation( XMMatrixRotationX( dy ) );
 }
 
 
