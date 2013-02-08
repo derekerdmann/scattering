@@ -41,9 +41,14 @@ protected:
     /* compiled DirectX11 effect */
 	ID3DX11Effect* _fx;
 
-private:
+    /* generates the indices for the sphere, allows this to be used for
+     * both planet and atmosphere */
+    virtual void generateIndices() = 0;
+
     std::vector<Vertex> _vertices;
     std::vector<UINT> _indices;
+
+private:
 
     ID3D11Buffer *_vertexBuffer;
     ID3D11Buffer *_indexBuffer;

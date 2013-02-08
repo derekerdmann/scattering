@@ -91,3 +91,19 @@ void Planet::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContex
     d3dDeviceContext->DrawIndexed(60, 0, 0);
 
 }
+
+void Planet::generateIndices() {
+
+	UINT indices[60] = {
+		1,4,0,  4,9,0,  4,5,9,  8,5,4,  1,8,4,    
+		1,10,8, 10,3,8, 8,3,5,  3,2,5,  3,7,2,    
+		3,10,7, 10,6,7, 6,11,7, 6,0,11, 6,1,0, 
+		10,1,6, 11,0,9, 2,11,9, 5,2,9,  11,2,7 
+	};
+
+	_indices.resize( ARRAYSIZE( indices ) );
+    for( unsigned int i = 0; i < ARRAYSIZE( indices ); ++i ){
+        _indices[i] = indices[i];
+    }
+    
+}

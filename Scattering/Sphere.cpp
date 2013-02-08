@@ -35,18 +35,6 @@ Sphere::Sphere( float radius, wstring effectFileName )
         _vertices[i].color = XMFLOAT4( 1, 0, 0, 1 );
     }
 
-	UINT indices[60] = {
-		1,4,0,  4,9,0,  4,5,9,  8,5,4,  1,8,4,    
-		1,10,8, 10,3,8, 8,3,5,  3,2,5,  3,7,2,    
-		3,10,7, 10,6,7, 6,11,7, 6,0,11, 6,1,0, 
-		10,1,6, 11,0,9, 2,11,9, 5,2,9,  11,2,7 
-	};
-
-	_indices.resize( ARRAYSIZE( indices ) );
-    for( unsigned int i = 0; i < ARRAYSIZE( indices ); ++i ){
-        _indices[i] = indices[i];
-    }
-    
 }
 
 
@@ -59,6 +47,8 @@ Sphere::~Sphere(void) {
 
 /* Create a buffer for the shape */
 void Sphere::createBuffer( ID3D11Device *d3dDevice ) {
+
+    generateIndices();
     
     D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;

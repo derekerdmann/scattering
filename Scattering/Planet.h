@@ -30,6 +30,10 @@ public:
         ID3D11DeviceContext *d3dDeviceContext
     );
 
+protected:
+    /* generates the indices for the planet's sphere */
+    virtual void generateIndices();
+
 private:
 
     /* The planet's atmospheric shell */
