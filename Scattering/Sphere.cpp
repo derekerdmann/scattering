@@ -8,11 +8,10 @@ using namespace std;
 
 
 /* Constructor */
-Sphere::Sphere( float radius, wstring effectFileName )
+Sphere::Sphere( float radius )
     : _r( radius ),
       _vertexBuffer( nullptr ),
-      _indexBuffer( nullptr ),
-      _effectFile( effectFileName )
+      _indexBuffer( nullptr )
 {
 	const float X = 0.525731f; 
 	const float Z = 0.850651f;

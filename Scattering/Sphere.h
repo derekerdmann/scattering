@@ -17,7 +17,7 @@ class Sphere {
 public:
     
     /* Constructor */
-    Sphere( float radius, std::wstring effectFileName );
+    Sphere( float radius );
 
     /* Destructor */
     virtual ~Sphere(void);
@@ -38,8 +38,6 @@ public:
     ) = 0;
 
 protected:
-    /* compiled DirectX11 effect */
-	ID3DX11Effect* _fx;
 
     /* generates the indices for the sphere, allows this to be used for
      * both planet and atmosphere */
@@ -52,9 +50,6 @@ private:
 
     ID3D11Buffer *_vertexBuffer;
     ID3D11Buffer *_indexBuffer;
-
-    /* Effect file name */
-    std::wstring _effectFile;
 
     float _r;
 };

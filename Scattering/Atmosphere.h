@@ -16,16 +16,28 @@ public:
     Atmosphere( float planetRadius, float karmanLine );
     virtual ~Atmosphere(void);
 
-    /* Retrieve the effect technique */
-    virtual void storeEffectVariables();
+    // Sets up the shaders for the object
+    virtual void setupShaders(
+        ID3D11Device *d3dDevice, 
+        ID3D11DeviceContext* d3dDeviceContext
+    );
 
-    // Sets up the vertex layout
-    virtual void createVertexLayout( ID3D11Device *d3dDevice );
+    /* Draws the planet on the screen */
+    void draw(
+        ID3D11Device *d3dDevice,
+        ID3D11DeviceContext *d3dDeviceContext
+    );
+
+protected:
+    /* generates the indices for the planet's sphere */
+    virtual void generateIndices();
 
 private:
 
+    ID3D11VertexShader* _vertexShader;
+    ID3D11PixelShader* _pixelShader;
+
 	ID3D11InputLayout* _inputLayout;
-	ID3DX11EffectTechnique* _technique;
 };
 
 }

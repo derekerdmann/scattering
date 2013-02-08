@@ -18,6 +18,9 @@ public:
     /* Destructor */
     virtual ~Planet(void);
 
+    /* Initializes the vertex and index buffers */
+    virtual void createBuffer( ID3D11Device *d3dDevice );
+
     // Sets up the shaders for the object
     virtual void setupShaders(
         ID3D11Device *d3dDevice, 
@@ -37,7 +40,7 @@ protected:
 private:
 
     /* The planet's atmospheric shell */
-    //Atmosphere _atmosphere;
+    Atmosphere _atmosphere;
 
     /* Planet's radius */
     float _r;

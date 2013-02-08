@@ -5,8 +5,8 @@ using namespace DirectX;
 using namespace Scattering;
 
 Planet::Planet( float radius, float karmanLine )
-    : Sphere( radius, L"planet.fx" ),
-      //_atmosphere( radius, karmanLine ),
+    : Sphere( radius ),
+      _atmosphere( radius, karmanLine ),
       _vertexShader( nullptr ),
       _pixelShader( nullptr )
 {
@@ -19,10 +19,14 @@ Planet::~Planet(void)
 }
 
 
+void Planet::createBuffer( ID3D11Device *d3dDevice ) {
+    Sphere::createBuffer( d3dDevice );
+    _atmosphere.createBuffer( d3dDevice );
+}
+
+
 /* Initializes the vertex layout */
 void Planet::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContext ) {
-
-    //_atmosphere.createVertexLayout( d3dDevice );
 
     ID3DBlob *vertexShaderBuffer = nullptr;
     HRESULT hr = S_OK;
@@ -70,6 +74,8 @@ void Planet::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDevi
     assert( SUCCEEDED( hr ) );
 
     Release( pixelShaderBuffer );
+
+    _atmosphere.setupShaders( d3dDevice, d3dDeviceContext );
 }
 
 
@@ -89,6 +95,8 @@ void Planet::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContex
     d3dDeviceContext->VSSetShader( _vertexShader, nullptr, 0 );
 
     d3dDeviceContext->DrawIndexed(60, 0, 0);
+
+    _atmosphere.draw( d3dDevice, d3dDeviceContext );
 
 }
 
