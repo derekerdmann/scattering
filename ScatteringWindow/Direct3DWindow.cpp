@@ -35,8 +35,9 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _width( 600 ),
       _height( 600 ),
       // Planet sizes given in meters
-      _planet( 1, 1 )
+      _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
+      _camera( XMFLOAT3( 0, 0, 5 ), XMFLOAT3( 0, 0, 0 ) )
 {
     window = this;
 
@@ -189,13 +190,6 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-	XMVECTOR pos = XMVectorSet( 5, 0, -5, 1 );
-	XMVECTOR target = XMVectorSet( 0, 0, 0, 1 );
-	XMVECTOR up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-
-	XMMATRIX V = XMMatrixLookAtLH( pos, target, up );
-	XMStoreFloat4x4(&_view, V);
-
 }
 
 
@@ -220,7 +214,7 @@ void Direct3DWindow::drawScene() {
 
 	// Set constants
 	XMMATRIX world = XMMatrixIdentity();
-	XMMATRIX view  = XMLoadFloat4x4( &_view );
+    XMMATRIX view  = _camera.getViewMatrix();
 	XMMATRIX proj  = XMLoadFloat4x4( &_proj );
 	XMMATRIX worldViewProj = world * view * proj;
 

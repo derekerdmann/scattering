@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Planet.h"
+#include "Camera.h"
 
 namespace Scattering {
 
@@ -63,8 +64,9 @@ private:
 	int _height;
 
     Planet _planet;
+    Camera _camera;
 
-    DirectX::XMFLOAT4X4 _view, _proj;
+    DirectX::XMFLOAT4X4 _proj;
 };
 
 }

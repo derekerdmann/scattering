@@ -7,9 +7,13 @@ namespace Scattering {
 class Camera {
 public:
 
+    /* Default up vector for all cameras */
+    static const DirectX::XMVECTOR Camera::DEFAULT_UP;
+
+    /* Default constructor, defaults position to [0 0 0], lookAt to [0 0 1] */
+    Camera();
+
     /* Constructor
-     * "Up" vector defaults to [0 1 0]
-     *
      * position - the initial location of the camera 
      * lookAt - the initial target of the camera
      */
@@ -29,6 +33,9 @@ public:
 
     /* Changes the yaw of the camera (rotation around y axis) in degrees */
     void yawDegrees( float dx );
+
+    /* Returns the view matrix based on the camera axes */
+    DirectX::XMMATRIX getViewMatrix();
 
 private:
 
