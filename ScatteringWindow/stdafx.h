@@ -18,7 +18,7 @@
 #include <tchar.h>
 
 
-// TODO: reference additional headers your program requires here
+#include <windowsx.h>
 #include <DirectXMath.h>
 #include <d3d11.h>
 

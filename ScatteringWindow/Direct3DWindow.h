@@ -33,6 +33,9 @@ public:
     // Calculate the aspect ratio of the window
 	float aspectRatio() const;
 
+    /* Handle mouse movement with the camera */
+    void onMouseMove( WPARAM buttonState, int x, int y );
+
 private:
 
     /* Initialize the main application window */
@@ -65,6 +68,8 @@ private:
 
     Planet _planet;
     Camera _camera;
+
+    DirectX::XMFLOAT2 _lastMousePosition;
 
     DirectX::XMFLOAT4X4 _proj;
 };

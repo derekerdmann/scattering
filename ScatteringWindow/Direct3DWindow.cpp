@@ -37,7 +37,8 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in meters
       _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 5, 0, 0 ), XMFLOAT3( 0, 0, 0 ) )
+      _camera( XMFLOAT3( 5, 0, 0 ), XMFLOAT3( 0, 0, 0 ) ),
+      _lastMousePosition( 0, 0 )
 {
     window = this;
 
@@ -258,6 +259,14 @@ void Direct3DWindow::drawScene() {
 
 /* Handle Windows window messages */
 LRESULT Direct3DWindow::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
+    switch( msg ) {
+
+	case WM_MOUSEMOVE:
+		onMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+    }
+
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -265,6 +274,22 @@ LRESULT Direct3DWindow::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 // Calculate the aspect ratio of the window
 float Direct3DWindow::aspectRatio() const {
 	return static_cast<float>(_width) / _height;
+}
+
+void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
+{
+	if( (buttonState & MK_LBUTTON) != 0 )
+	{
+		// Make each pixel correspond to a quarter of a degree.
+        float dx = 0.25f*static_cast<float>(x - _lastMousePosition.x);
+		float dy = 0.25f*static_cast<float>(y - _lastMousePosition.y);
+
+		_camera.pitchDegrees(dy);
+        _camera.yawDegrees(dx);
+	}
+
+	_lastMousePosition.x = x;
+	_lastMousePosition.y = y;
 }
 
 
