@@ -6,7 +6,7 @@ using namespace DirectX;
 
 
 const XMVECTOR Camera::DEFAULT_POSITION = XMVectorSet( 0, 0, 0, 0 );
-const XMVECTOR Camera::DEFAULT_LOOKAT = XMVectorSet( 0, 0, 0, 0 );
+const XMVECTOR Camera::DEFAULT_LOOKAT = XMVectorSet( 0, 0, 1, 0 );
 const XMVECTOR Camera::DEFAULT_UP = XMVectorSet( 0, 1, 0, 0 );
 
 
