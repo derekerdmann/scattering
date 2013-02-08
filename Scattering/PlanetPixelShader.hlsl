@@ -2,5 +2,5 @@
 
 float4 main( in VS_OUTPUT input ) : SV_TARGET
 {
-    return input.Normal;
+    return abs( input.Normal );
 }

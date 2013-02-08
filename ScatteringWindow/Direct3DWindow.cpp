@@ -155,12 +155,12 @@ void Direct3DWindow::onResize() {
     // TODO - figure out if this is needed
     D3D11_RASTERIZER_DESC rasterDesc;
     rasterDesc.AntialiasedLineEnable = false;
-	rasterDesc.CullMode = D3D11_CULL_BACK;
+    rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.DepthBias = false;
 	rasterDesc.DepthBiasClamp = 0;
 	rasterDesc.DepthClipEnable = false;
     rasterDesc.FillMode = D3D11_FILL_SOLID;
-	rasterDesc.FrontCounterClockwise = true;
+	rasterDesc.FrontCounterClockwise = false;
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0;
@@ -183,8 +183,8 @@ void Direct3DWindow::onResize() {
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
     XMMATRIX P = XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatio(), 1.0f, 1000.0f);
-    P = XMMatrixOrthographicLH( 8, 8, 1, 100 );
-	XMStoreFloat4x4(&_proj, P);
+    P = XMMatrixOrthographicLH( 3, 3, 1, 100 );
+	XMStoreFloat4x4(&_proj, XMMatrixTranspose( P ) );
 }
 
 
