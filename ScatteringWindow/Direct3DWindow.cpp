@@ -34,10 +34,10 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _resizing( false ),
       _width( 600 ),
       _height( 600 ),
-      // Planet sizes given in meters
-      _planet( 1, 1 ),
-      //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 0, 1.5, 0 ), XMFLOAT3( 0, 1.5, 1 ), XMFLOAT3( 0, 1, 0 ) ),
+      // Planet sizes given in kilometers
+      _planet( 10, 3 ),
+      //_planet( 6371, 100 ),
+      _camera( XMFLOAT3( 0, 10.5, 0 ), XMFLOAT3( 0, 10.5, 1 ), XMFLOAT3( 0, 1, 0 ) ),
       _lastMousePosition( 0, 0 )
 {
     window = this;
@@ -280,8 +280,8 @@ void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
 	if( (buttonState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-        float dx = 0.0025f * static_cast<float>( x - _lastMousePosition.x );
-		float dy = 0.0025f * static_cast<float>( y - _lastMousePosition.y );
+        float dx = 0.025f * static_cast<float>( x - _lastMousePosition.x );
+		float dy = 0.025f * static_cast<float>( y - _lastMousePosition.y );
 
 		_camera.pitchDegrees(dy);
         _camera.rotateYDegrees(dx);

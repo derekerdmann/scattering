@@ -64,5 +64,23 @@ XMMATRIX Camera::getViewMatrix() {
 	_up = XMVector3Normalize(XMVector3Cross( _lookAt, _right ) );
 	_right = XMVector3Cross( _up, _lookAt ); 
 
-    return XMMatrixLookAtLH( _position, _lookAt, _up );
+    //return XMMatrixLookAtLH( _position, _lookAt, _up );
+
+	// Fill in the view matrix entries.
+	float x = -XMVectorGetX( XMVector3Dot( _position, _right ) );
+	float y = -XMVectorGetX( XMVector3Dot( _position, _up ) );
+	float z = -XMVectorGetX( XMVector3Dot( _position, _lookAt ) );
+
+    XMFLOAT3 R, U, L;
+    XMStoreFloat3( &R, _right );
+    XMStoreFloat3( &U, _up );
+    XMStoreFloat3( &L, _lookAt );
+
+    return XMMatrixSet(
+        R.x, U.x, L.x, 0,
+        R.y, U.y, L.y, 0,
+        R.z, U.z, L.z, 0,
+        x,   y,   z,   1
+    );
+
 }
