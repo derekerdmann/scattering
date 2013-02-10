@@ -5,25 +5,20 @@ using namespace Scattering;
 using namespace DirectX;
 
 
-const XMVECTOR Camera::DEFAULT_POSITION = XMVectorSet( 0, 0, 0, 0 );
 const XMVECTOR Camera::DEFAULT_LOOKAT = XMVectorSet( 0, 0, 1, 0 );
-const XMVECTOR Camera::DEFAULT_UP = XMVectorSet( 0, 1, 0, 0 );
 
 
 /* Constructor */
-Camera::Camera()
-    : _position( DEFAULT_POSITION ),
-      _lookAt( DEFAULT_LOOKAT ),
-      _up( DEFAULT_UP )
-{ }
-
-
-/* Constructor */
-Camera::Camera( DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 lookAt )
-    : _position( XMLoadFloat3( &position ) ),
-      _lookAt( XMLoadFloat3( &lookAt ) ),
-      _up( DEFAULT_UP )
-{ }
+Camera::Camera(
+    DirectX::XMFLOAT3 position,
+    DirectX::XMFLOAT3 lookAt,
+    XMFLOAT3 worldUp
+) : _position( XMLoadFloat3( &position ) )
+{
+    _lookAt = XMVector3Normalize( XMLoadFloat3( &lookAt ) - _position ),
+    _right = XMVector3Normalize( XMVector3Cross( XMLoadFloat3( &worldUp ), _lookAt ) ),
+    _up = XMVector3Cross( _lookAt, _right );
+}
 
 
 /* Destructor */
@@ -38,31 +33,36 @@ void Camera::pitch( float dy ) {
 
 /* Changes the pitch of the camera by the specified delta in degrees */
 void Camera::pitchDegrees( float dy ) {
-    applyTransformation( XMMatrixRotationX( dy ) );
+    XMMATRIX R = XMMatrixRotationAxis( _right, dy );
+
+    _up = XMVector3TransformNormal( _up, R );
+    _lookAt = XMVector3TransformNormal( _lookAt, R );
 }
 
 
-/* Changes the yaw of the camera (rotation around y axis) in radians */
-void Camera::yaw( float dx ) {
-    yawDegrees( XMConvertToRadians( dx ) );
+/* Changes the rotateY of the camera (rotation around y axis) in radians */
+void Camera::rotateY( float dx ) {
+    rotateYDegrees( XMConvertToRadians( dx ) );
 }
 
 
-/* Changes the yaw of the camera (rotation around y axis) in degrees */
-void Camera::yawDegrees( float dx ) {
-    applyTransformation( XMMatrixRotationY( dx ) );
-}
+/* Changes the rotateY of the camera (rotation around y axis) in degrees */
+void Camera::rotateYDegrees( float dx ) {
+    XMMATRIX R = XMMatrixRotationY( dx );
 
-
-/* Applys the transformation matrix to the camera vectors */
-void Camera::applyTransformation( DirectX::XMMATRIX transform ) {
-    _position = XMVector3Transform(_position, transform );
-    _lookAt = XMVector3Transform(_lookAt, transform );
-    _up = XMVector3Transform(_up, transform );
+	_right = XMVector3TransformNormal(_right, R);
+	_up = XMVector3TransformNormal(_up, R);
+	_lookAt = XMVector3TransformNormal(_lookAt, R);
 }
 
 
 /* Returns the view matrix based on the camera axes */
 XMMATRIX Camera::getViewMatrix() {
+
+    // Ortho-normalize to prevent floating point error
+	_lookAt = XMVector3Normalize( _lookAt );
+	_up = XMVector3Normalize(XMVector3Cross( _lookAt, _right ) );
+	_right = XMVector3Cross( _up, _lookAt ); 
+
     return XMMatrixLookAtLH( _position, _lookAt, _up );
 }

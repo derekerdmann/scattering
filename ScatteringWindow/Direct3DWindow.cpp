@@ -37,7 +37,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in meters
       _planet( 1, 1 ),
       //_planet( 6371000, 100000 )
-      _camera( XMFLOAT3( 0, 1.5, 0 ), XMFLOAT3( 0, 0, 0 ) ),
+      _camera( XMFLOAT3( 0, 1.5, 0 ), XMFLOAT3( 0, 1.5, 1 ), XMFLOAT3( 0, 1, 0 ) ),
       _lastMousePosition( 0, 0 )
 {
     window = this;
@@ -284,7 +284,7 @@ void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
 		float dy = 0.0025f * static_cast<float>( y - _lastMousePosition.y );
 
 		_camera.pitchDegrees(dy);
-        _camera.yawDegrees(dx);
+        _camera.rotateYDegrees(dx);
 	}
 
 	_lastMousePosition.x = x;

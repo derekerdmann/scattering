@@ -7,14 +7,14 @@ namespace Scattering {
 class Camera {
 public:
 
-    /* Default position vector */
-    static const DirectX::XMVECTOR Camera::DEFAULT_POSITION;
-
     /* Default lookAt vector */
     static const DirectX::XMVECTOR Camera::DEFAULT_LOOKAT;
 
     /* Default up vector */
     static const DirectX::XMVECTOR Camera::DEFAULT_UP;
+
+    /* Default right vector */
+    static const DirectX::XMVECTOR Camera::DEFAULT_RIGHT;
 
 
     /* Default constructor, defaults position to [0 0 0], lookAt to [0 0 1] */
@@ -24,7 +24,11 @@ public:
      * position - the initial location of the camera 
      * lookAt - the initial target of the camera
      */
-    Camera( DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 lookAt );
+    Camera(
+        DirectX::XMFLOAT3 position,
+        DirectX::XMFLOAT3 lookAt,
+        DirectX::XMFLOAT3 worldUp
+    );
 
     /* Destructor */
     virtual ~Camera(void);
@@ -35,22 +39,19 @@ public:
     /* Changes the pitch of the camera by the specified delta in degrees */
     void pitchDegrees( float dy );
 
-    /* Changes the yaw of the camera (rotation around y axis) in radians */
-    void yaw( float dx );
+    /* Changes the rotation around y axis in radians */
+    void rotateY( float dx );
 
-    /* Changes the yaw of the camera (rotation around y axis) in degrees */
-    void yawDegrees( float dx );
+    /* Changes the rotation around y axis in degrees */
+    void rotateYDegrees( float dx );
 
     /* Returns the view matrix based on the camera axes */
     DirectX::XMMATRIX getViewMatrix();
 
 private:
 
-    /* Applys the transformation matrix to the camera vectors */
-    void applyTransformation( DirectX::XMMATRIX transform );
-
     /* Vectors that determine the camera space */
-    DirectX::XMVECTOR _position, _lookAt, _up;
+    DirectX::XMVECTOR _position, _lookAt, _up, _right;
 
 };
 
