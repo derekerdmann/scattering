@@ -1,6 +1,6 @@
-
 #include "Structures.hlsli"
 
+// Information related to the 
 cbuffer viewingData
 {
     float3 cameraPosition;
@@ -9,14 +9,14 @@ cbuffer viewingData
 // updated as the sun moves through the sky
 cbuffer sunDependent
 {
-    float sunAngle              // theta
-    float phaseFunctionResult   // F( theta, g )
+    float sunAngle;              // theta
+    float phaseFunctionResult;   // F( theta, g )
 }
 
 // Should only be set once
 cbuffer atmosphericConstants 
 {
-    float3 sunIntensity             // I0 [R, G, B]
+    float3 sunIntensity;            // I0 [R, G, B]
     float3 attenuationCoefficient;  // beta [R, G, B]
     float refractionIndex;          // n
     float scaleHeight;              // H0
@@ -36,7 +36,7 @@ float densityRatio( float h )
 }
 
 
-float4 main( in VS_OUTPUT input ) : SV_TARGET
+float4 main( in PS_INPUT input ) : SV_TARGET
 {
     return input.Normal;
 }

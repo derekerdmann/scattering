@@ -6,7 +6,7 @@ struct VS_INPUT {
 };
 
 // Vertex shader output format
-struct VS_OUTPUT {
+struct PS_INPUT {
     float4 Position : SV_POSITION;
     float4 Normal : NORMAL;
     float4 Color : COLOR;
