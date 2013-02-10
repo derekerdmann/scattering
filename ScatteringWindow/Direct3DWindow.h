@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Planet.h"
 #include "Camera.h"
+#include "ConstantBuffers.h"
 
 namespace Scattering {
 

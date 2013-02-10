@@ -27,6 +27,9 @@ public:
         ID3D11DeviceContext* d3dDeviceContext
     );
 
+    /* Sets constants that will only be computed once for shaders */
+    virtual void setConstants( ID3D11Device *d3dDevice );
+
     /* Draws the planet on the screen */
     void draw(
         ID3D11Device *d3dDevice,

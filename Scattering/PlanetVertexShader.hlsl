@@ -1,6 +1,5 @@
 #include "Structures.hlsli"
-
-float4x4 worldViewProjection;
+#include "Constants.hlsli"
 
 PS_INPUT main( in VS_INPUT input )
 {

@@ -7,7 +7,8 @@ using namespace Scattering;
 Atmosphere::Atmosphere( float planetRadius, float karmanLine )
     : Sphere( planetRadius + karmanLine ),
       _vertexShader( nullptr ),
-      _pixelShader( nullptr )
+      _pixelShader( nullptr ),
+      _planetRadius( planetRadius )
 {
 }
 
@@ -17,7 +18,10 @@ Atmosphere::~Atmosphere(void)
 }
 
 /* Initializes the vertex layout */
-void Atmosphere::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContext ) {
+void Atmosphere::setupShaders(
+    ID3D11Device *d3dDevice,
+    ID3D11DeviceContext *d3dDeviceContext
+) {
 
     ID3DBlob *vertexShaderBuffer = nullptr;
     HRESULT hr = S_OK;
@@ -68,7 +72,40 @@ void Atmosphere::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3d
 }
 
 
-void Atmosphere::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContext ) {
+/* Sets constants at the start of the program */
+void Atmosphere::setConstants( ID3D11Device *d3dDevice ) {
+
+    // Fill in a buffer description.
+    //D3D11_BUFFER_DESC cbDesc;
+    //cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
+    //cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    //cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    //cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    //cbDesc.MiscFlags = 0;
+    //cbDesc.StructureByteStride = 0;
+
+    //// Fill in the subresource data.
+    //D3D11_SUBRESOURCE_DATA data;
+    //data.pSysMem = &wvp;
+    //data.SysMemPitch = 0;
+    //data.SysMemSlicePitch = 0;
+
+    //// Create the buffer.
+    //ID3D11Buffer *constantBuffer = nullptr;
+    //HRESULT hr = d3dDevice->CreateBuffer(
+    //    &cbDesc,
+    //    &data,
+    //    &constantBuffer
+    //);
+
+    //assert( SUCCEEDED( hr ) );
+}
+
+
+void Atmosphere::draw(
+    ID3D11Device *d3dDevice,
+    ID3D11DeviceContext *d3dDeviceContext
+) {
     
 	UINT stride = sizeof(Vertex);
     UINT offset = 0;

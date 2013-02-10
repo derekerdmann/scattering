@@ -79,6 +79,12 @@ void Planet::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDevi
 }
 
 
+/* Sets constants for the beginning of the program */
+void Planet::setConstants( ID3D11Device *d3dDevice ) {
+    _atmosphere.setConstants( d3dDevice );
+}
+
+
 void Planet::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContext ) {
     
 	UINT stride = sizeof(Vertex);

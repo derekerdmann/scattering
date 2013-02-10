@@ -46,6 +46,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantBuffers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -80,6 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Structures.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Constants.hlsli">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -216,12 +216,14 @@ void Direct3DWindow::drawScene() {
 	XMMATRIX proj  = _camera.getProjectionMatrix( aspectRatio() );
 	XMMATRIX worldViewProj = world * view * proj;
 
-    XMFLOAT4X4 wvp;
-    XMStoreFloat4x4( &wvp, worldViewProj );
+    ViewingData viewData;
+    XMStoreFloat4x4( &viewData.wordViewProjection, worldViewProj );
+
+    assert( sizeof( ViewingData ) % 16 == 0 );
 
     // Fill in a buffer description.
     D3D11_BUFFER_DESC cbDesc;
-    cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
+    cbDesc.ByteWidth = sizeof( ViewingData );
     cbDesc.Usage = D3D11_USAGE_DYNAMIC;
     cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -230,7 +232,7 @@ void Direct3DWindow::drawScene() {
 
     // Fill in the subresource data.
     D3D11_SUBRESOURCE_DATA data;
-    data.pSysMem = &wvp;
+    data.pSysMem = &viewData;
     data.SysMemPitch = 0;
     data.SysMemSlicePitch = 0;
 
