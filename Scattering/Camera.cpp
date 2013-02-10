@@ -56,6 +56,12 @@ void Camera::rotateYDegrees( float dx ) {
 }
 
 
+/* Stores the position of the camera in the supplied XMFLOAT3 */
+void Camera::getPosition( XMFLOAT4& pos ) {
+    XMStoreFloat4( &pos, _position );
+}
+
+
 /* Returns the view matrix based on the camera axes */
 XMMATRIX Camera::getViewMatrix() {
 

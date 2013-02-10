@@ -218,6 +218,7 @@ void Direct3DWindow::drawScene() {
 
     ViewingData viewData;
     XMStoreFloat4x4( &viewData.wordViewProjection, worldViewProj );
+    _camera.getPosition( viewData.cameraPosition );
 
     assert( sizeof( ViewingData ) % 16 == 0 );
 

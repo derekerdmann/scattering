@@ -45,6 +45,9 @@ public:
     /* Changes the rotation around y axis in degrees */
     void rotateYDegrees( float dx );
 
+    /* Stores the position of the camera in the supplied XMFLOAT3 */
+    void getPosition( DirectX::XMFLOAT4& position );
+
     /* Returns the view matrix based on the camera axes */
     DirectX::XMMATRIX getViewMatrix();
 
