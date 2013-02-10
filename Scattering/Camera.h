@@ -48,6 +48,9 @@ public:
     /* Returns the view matrix based on the camera axes */
     DirectX::XMMATRIX getViewMatrix();
 
+    /* Returns the projection matrix */
+    DirectX::XMMATRIX getProjectionMatrix( float aspectRatio );
+
 private:
 
     /* Vectors that determine the camera space */

@@ -12,6 +12,8 @@ namespace {
 }
 
 
+const UINT Direct3DWindow::SUN_DIST = 149597870;
+
 
 /* Windows is expecting a standalone function, so this proxies to the Window object */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -180,10 +182,6 @@ void Direct3DWindow::onResize() {
 	_viewport.MaxDepth = 1;
 
 	_d3dDeviceContext->RSSetViewports(1, &_viewport);
-
-	// The window resized, so update the aspect ratio and recompute the projection matrix.
-    XMMATRIX P = XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio(), 0.1f, 1000000 );
-	XMStoreFloat4x4(&_proj, P );
 }
 
 
@@ -215,7 +213,7 @@ void Direct3DWindow::drawScene() {
 	// Set constants
 	XMMATRIX world = XMMatrixIdentity();
     XMMATRIX view  = _camera.getViewMatrix();
-	XMMATRIX proj  = XMLoadFloat4x4( &_proj );
+	XMMATRIX proj  = _camera.getProjectionMatrix( aspectRatio() );
 	XMMATRIX worldViewProj = world * view * proj;
 
     XMFLOAT4X4 wvp;

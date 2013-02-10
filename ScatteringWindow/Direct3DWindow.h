@@ -71,7 +71,7 @@ private:
 
     DirectX::XMFLOAT2 _lastMousePosition;
 
-    DirectX::XMFLOAT4X4 _proj;
+    static const UINT SUN_DIST;
 };
 
 }

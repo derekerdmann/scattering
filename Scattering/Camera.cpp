@@ -64,8 +64,6 @@ XMMATRIX Camera::getViewMatrix() {
 	_up = XMVector3Normalize(XMVector3Cross( _lookAt, _right ) );
 	_right = XMVector3Cross( _up, _lookAt ); 
 
-    //return XMMatrixLookAtLH( _position, _lookAt, _up );
-
 	// Fill in the view matrix entries.
 	float x = -XMVectorGetX( XMVector3Dot( _position, _right ) );
 	float y = -XMVectorGetX( XMVector3Dot( _position, _up ) );
@@ -83,4 +81,12 @@ XMMATRIX Camera::getViewMatrix() {
         x,   y,   z,   1
     );
 
+}
+
+
+/* Returns the projection matrix  */
+XMMATRIX Camera::getProjectionMatrix( float aspectRatio ) {
+
+	// The window resized, so update the aspect ratio and recompute the projection matrix.
+    return XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio, 0.1f, 1000000 );
 }
