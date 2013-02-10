@@ -35,7 +35,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _width( 600 ),
       _height( 600 ),
       // Planet sizes given in kilometers
-      _planet( 10, 3 ),
+      _planet( 10, 1 ),
       //_planet( 6371, 100 ),
       _camera( XMFLOAT3( 0, 10.5, 0 ), XMFLOAT3( 0, 10.5, 1 ), XMFLOAT3( 0, 1, 0 ) ),
       _lastMousePosition( 0, 0 )
