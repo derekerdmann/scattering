@@ -38,8 +38,8 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _height( 600 ),
       // Planet sizes given in kilometers
       //_planet( 10, 1 ),
-      _planet( 6378.1, 100 ),
-      _camera( XMFLOAT3( 0, 6378.101, 0 ), XMFLOAT3( 0, 6378.101, 1 ), XMFLOAT3( 0, 1, 0 ) ),
+      _planet( 6378.1f, 100 ),
+      _camera( XMFLOAT3( 0, 6378.101f, 0 ), XMFLOAT3( 0, 6378.101f, 1 ), XMFLOAT3( 0, 1, 0 ) ),
       _lastMousePosition( 0, 0 )
 {
     window = this;
@@ -188,6 +188,46 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
+    XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
+    pos = pos * 149597870.700f;
+    XMStoreFloat3( &_sunPosition, pos );
+
+    _sun.sunAngle = XMVectorGetX(
+        XMVector3AngleBetweenVectors( pos, XMVectorSet( 0, 1, 0, 0 ) )
+    );
+
+    _sun.phaseFunctionResult = _planet.phaseFunction( _sun.sunAngle );
+
+	// Pass constants to shader
+
+    // Fill in a buffer description.
+    D3D11_BUFFER_DESC cbDesc;
+    cbDesc.ByteWidth = sizeof( SunData ) + 8;
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbDesc.MiscFlags = 0;
+    cbDesc.StructureByteStride = 0;
+
+    // Fill in the subresource data.
+    D3D11_SUBRESOURCE_DATA data;
+    data.pSysMem = &_sun;
+    data.SysMemPitch = 0;
+    data.SysMemSlicePitch = 0;
+
+    // Create the buffer.
+    ID3D11Buffer *constantBuffer = nullptr;
+    HRESULT hr = _d3dDevice->CreateBuffer(
+        &cbDesc,
+        &data,
+        &constantBuffer
+    );
+
+    assert( SUCCEEDED( hr ) );
+
+    // Set the buffer.
+    _d3dDeviceContext->VSSetConstantBuffers( 1, 1, &constantBuffer );
+    Release( constantBuffer );
 }
 
 
@@ -288,8 +328,8 @@ void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
         _camera.rotateYDegrees(dx);
 	}
 
-	_lastMousePosition.x = x;
-	_lastMousePosition.y = y;
+	_lastMousePosition.x = static_cast<float>( x );
+	_lastMousePosition.y = static_cast<float>( y );
 }
 
 

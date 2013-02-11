@@ -4,6 +4,13 @@
 
 namespace Scattering {
 
+/* Wavelengths for RGB colors, specified in nanometers */
+enum ColorWavelengths {
+    RED = 650,
+    GREEN = 532,
+    BLUE = 473
+};
+
 
 /* Viewing Data constant buffer. Should be bound to register 0 */
 struct ViewingData {
@@ -25,7 +32,7 @@ struct SunData {
  */
 struct StaticConstants {
     DirectX::XMFLOAT3 sunIntensity;
-    DirectX::XMFLOAT3 atteniationCoefficient;
+    DirectX::XMFLOAT3 attenuationCoefficient;
     float refractionIndex;
     float scaleHeight;
     float planetRadius;

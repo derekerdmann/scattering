@@ -18,6 +18,9 @@ public:
     /* Molecular density of standard atmosphere */
     static const float MOLECULAR_DENSITY;
 
+    /* Constant for atmospheric conditions */
+    static const float U;
+
 
     /* Constructor
      * planetRadius - radius of the planet that owns the atmosphere
@@ -33,7 +36,11 @@ public:
     );
 
     /* Sets constants that will only be computed once for shaders */
-    virtual void setConstants( ID3D11Device *d3dDevice );
+    virtual void setConstants(
+        ID3D11Device *d3dDevice,
+        ID3D11DeviceContext *d3dDeviceContext,
+        DirectX::XMFLOAT3 sunIntensity
+    );
 
     /* Draws the planet on the screen */
     void draw(
@@ -41,11 +48,17 @@ public:
         ID3D11DeviceContext *d3dDeviceContext
     );
 
+    /* Calculates the phase function */
+    float phaseFunction( float angle );
+
 protected:
     /* generates the indices for the planet's sphere */
     virtual void generateIndices();
 
 private:
+
+    /* Calculates the attenuation coefficient for the specified wavelength */
+    inline float attenuation( int wavelength );
 
     float _planetRadius;
 

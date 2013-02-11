@@ -70,6 +70,9 @@ private:
     Planet _planet;
     Camera _camera;
 
+    SunData _sun;
+    DirectX::XMFLOAT3 _sunPosition;
+
     DirectX::XMFLOAT2 _lastMousePosition;
 
     static const UINT SUN_DIST;

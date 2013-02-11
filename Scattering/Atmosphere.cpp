@@ -1,8 +1,23 @@
 #include "stdafx.h"
 #include "Atmosphere.h"
+#include "ConstantBuffers.h"
 
 using namespace DirectX;
 using namespace Scattering;
+
+
+/* Thickness of atmosphere w/ uniform density (km) */
+const float Atmosphere::SCALE_HEIGHT = 7.994f;
+
+/* Index of refraction of air - source Wikipedia */
+const float Atmosphere::REFRACTION_INDEX = 1.000293f;
+
+/* Molecular density of standard atmosphere */
+const float Atmosphere::MOLECULAR_DENSITY = 2.54743e19f;
+
+/* Constant for atmospheric conditions */
+const float Atmosphere::U = 0.7f;
+
 
 Atmosphere::Atmosphere( float planetRadius, float karmanLine )
     : Sphere( planetRadius + karmanLine ),
@@ -23,7 +38,7 @@ void Atmosphere::setupShaders(
     ID3D11DeviceContext *d3dDeviceContext
 ) {
 
-    ID3DBlob *vertexShaderBuffer = nullptr;
+    ID3DBlob *vertexShaderBuffer = nullptr; 
     HRESULT hr = S_OK;
 
     hr = D3DReadFileToBlob( L"AtmosphereVertexShader.cso", &vertexShaderBuffer );
@@ -73,32 +88,49 @@ void Atmosphere::setupShaders(
 
 
 /* Sets constants at the start of the program */
-void Atmosphere::setConstants( ID3D11Device *d3dDevice ) {
+void Atmosphere::setConstants(
+    ID3D11Device *d3dDevice,
+    ID3D11DeviceContext *d3dDeviceContext,
+    XMFLOAT3 sunIntensity
+) {
 
     // Fill in a buffer description.
-    //D3D11_BUFFER_DESC cbDesc;
-    //cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
-    //cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    //cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    //cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    //cbDesc.MiscFlags = 0;
-    //cbDesc.StructureByteStride = 0;
+    D3D11_BUFFER_DESC cbDesc;
+    cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
+    cbDesc.Usage = D3D11_USAGE_IMMUTABLE;
+    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbDesc.MiscFlags = 0;
+    cbDesc.StructureByteStride = 0;
 
-    //// Fill in the subresource data.
-    //D3D11_SUBRESOURCE_DATA data;
-    //data.pSysMem = &wvp;
-    //data.SysMemPitch = 0;
-    //data.SysMemSlicePitch = 0;
+    StaticConstants constants;
+    constants.refractionIndex = Atmosphere::REFRACTION_INDEX;
+    constants.scaleHeight = Atmosphere::SCALE_HEIGHT;
+    constants.planetRadius = _planetRadius;
+    constants.attenuationCoefficient = XMFLOAT3(
+        attenuation( RED ),
+        attenuation( GREEN ),
+        attenuation( BLUE )
+    );
+    constants.sunIntensity = sunIntensity;
 
-    //// Create the buffer.
-    //ID3D11Buffer *constantBuffer = nullptr;
-    //HRESULT hr = d3dDevice->CreateBuffer(
-    //    &cbDesc,
-    //    &data,
-    //    &constantBuffer
-    //);
+    // Fill in the subresource data.
+    D3D11_SUBRESOURCE_DATA data;
+    data.pSysMem = &constants;
+    data.SysMemPitch = 0;
+    data.SysMemSlicePitch = 0;
 
-    //assert( SUCCEEDED( hr ) );
+    // Create the buffer.
+    ID3D11Buffer *constantBuffer = nullptr;
+    HRESULT hr = d3dDevice->CreateBuffer(
+        &cbDesc,
+        &data,
+        &constantBuffer
+    );
+
+    assert( SUCCEEDED( hr ) );
+
+    d3dDeviceContext->VSSetConstantBuffers( 2, 1, &constantBuffer );
 }
 
 
@@ -120,7 +152,7 @@ void Atmosphere::draw(
     d3dDeviceContext->PSSetShader( _pixelShader, nullptr, 0 );
     d3dDeviceContext->VSSetShader( _vertexShader, nullptr, 0 );
 
-    d3dDeviceContext->DrawIndexed( _indices.size(), 0, 0);
+    d3dDeviceContext->DrawIndexed( static_cast<UINT>( _indices.size() ), 0, 0);
 
 }
 
@@ -131,4 +163,28 @@ void Atmosphere::generateIndices() {
         std::swap( _indices[i], _indices[i+2] );
     }
 
+}
+
+
+/* Calculates the attenuation coefficient for the specified wavelength */
+inline float Atmosphere::attenuation( int wavelength ) {
+    const float n = Atmosphere::REFRACTION_INDEX;
+    const float Ns = Atmosphere::MOLECULAR_DENSITY;
+    const float lambda = static_cast<float>( wavelength );
+
+    return 8.0f * pow( XM_PI, 3.0f ) * pow( pow( n, 3.0f ) - 1, 2.0f )
+        / 3.0f * Ns * pow( lambda, 4.0f );
+}
+
+/* Calculates the phase function */
+float Atmosphere::phaseFunction( float angle ) {
+    
+    const float x = (5/9) * U + (125/729) * pow(U,3)
+        + pow( (64/27) - (325/243) * pow(U,2) + (1250/2187) * pow(U,4), 0.5f );
+
+    const float g = (5/9) * U - (4/3 - (25/81) * pow(U, 2)) * pow(x, -1/3)
+        + pow(x, 1/3);
+
+    return ((3 * (1-(pow(g,2))/(2*(2+pow(g,2)))))
+        * ((1 + pow(cos(angle),2)) / pow(1 + pow(g,2)+2 * g * cos(angle), 3/2)));
 }

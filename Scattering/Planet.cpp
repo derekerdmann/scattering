@@ -80,8 +80,12 @@ void Planet::setupShaders( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDevi
 
 
 /* Sets constants for the beginning of the program */
-void Planet::setConstants( ID3D11Device *d3dDevice ) {
-    _atmosphere.setConstants( d3dDevice );
+void Planet::setConstants(
+    ID3D11Device *d3dDevice,
+    ID3D11DeviceContext *d3dDeviceContext,
+    XMFLOAT3 sunIntensity
+) {
+    _atmosphere.setConstants( d3dDevice, d3dDeviceContext, sunIntensity );
 }
 
 
@@ -100,7 +104,7 @@ void Planet::draw( ID3D11Device *d3dDevice, ID3D11DeviceContext *d3dDeviceContex
     d3dDeviceContext->PSSetShader( _pixelShader, nullptr, 0 );
     d3dDeviceContext->VSSetShader( _vertexShader, nullptr, 0 );
 
-    d3dDeviceContext->DrawIndexed( _indices.size(), 0, 0);
+    d3dDeviceContext->DrawIndexed( static_cast<UINT>( _indices.size() ), 0, 0);
 
     _atmosphere.draw( d3dDevice, d3dDeviceContext );
 
@@ -120,4 +124,9 @@ void Planet::generateIndices() {
  //       _indices[i] = indices[i];
  //   }
     
+}
+
+
+float Planet::phaseFunction( float angle ) {
+    return _atmosphere.phaseFunction( angle );
 }
