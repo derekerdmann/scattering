@@ -7,8 +7,8 @@ namespace Scattering {
 /* Wavelengths for RGB colors, specified in nanometers */
 enum ColorWavelengths {
     RED = 650,
-    GREEN = 532,
-    BLUE = 473
+    GREEN = 570,
+    BLUE = 475
 };
 
 
@@ -24,6 +24,7 @@ struct ViewingData {
  */
 struct SunData {
     float sunAngle;
+    DirectX::XMFLOAT4 sunPosition;
     float phaseFunctionResult;
 };
 
@@ -31,8 +32,8 @@ struct SunData {
 /* Shader constants that are set once and are not changed
  */
 struct StaticConstants {
-    DirectX::XMFLOAT3 sunIntensity;
-    DirectX::XMFLOAT3 attenuationCoefficient;
+    DirectX::XMFLOAT4 sunIntensity;
+    DirectX::XMFLOAT4 attenuationCoefficient;
     float refractionIndex;
     float scaleHeight;
     float planetRadius;

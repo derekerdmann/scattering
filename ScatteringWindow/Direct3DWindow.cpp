@@ -192,6 +192,7 @@ void Direct3DWindow::updateScene() {
     pos = pos * 149597870.700f;
     XMStoreFloat3( &_sunPosition, pos );
 
+    XMStoreFloat4( &_sun.sunPosition, pos );
     _sun.sunAngle = XMVectorGetX(
         XMVector3AngleBetweenVectors( pos, XMVectorSet( 0, 1, 0, 0 ) )
     );
@@ -227,6 +228,7 @@ void Direct3DWindow::updateScene() {
 
     // Set the buffer.
     _d3dDeviceContext->VSSetConstantBuffers( 1, 1, &constantBuffer );
+    _d3dDeviceContext->PSSetConstantBuffers( 1, 1, &constantBuffer );
     Release( constantBuffer );
 }
 
@@ -289,6 +291,7 @@ void Direct3DWindow::drawScene() {
 
     // Set the buffer.
     _d3dDeviceContext->VSSetConstantBuffers( 0, 1, &constantBuffer );
+    _d3dDeviceContext->PSSetConstantBuffers( 0, 1, &constantBuffer );
     Release( constantBuffer );
 
     _planet.draw( _d3dDevice, _d3dDeviceContext );
@@ -459,4 +462,5 @@ void Direct3DWindow::setupDirect3D() {
 void Direct3DWindow::setScene() {
     _planet.createBuffer( _d3dDevice );
     _planet.setupShaders( _d3dDevice, _d3dDeviceContext );
+    _planet.setConstants( _d3dDevice, _d3dDeviceContext, XMFLOAT3( 1, 1, 1 ) );
 }

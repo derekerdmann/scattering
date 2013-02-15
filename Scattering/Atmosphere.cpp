@@ -96,23 +96,31 @@ void Atmosphere::setConstants(
 
     // Fill in a buffer description.
     D3D11_BUFFER_DESC cbDesc;
-    cbDesc.ByteWidth = sizeof( XMFLOAT4X4 );
-    cbDesc.Usage = D3D11_USAGE_IMMUTABLE;
+    cbDesc.ByteWidth = sizeof( StaticConstants ) + 4;
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
     cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     cbDesc.MiscFlags = 0;
     cbDesc.StructureByteStride = 0;
 
     StaticConstants constants;
+    ZeroMemory( &constants, sizeof( StaticConstants ) );
     constants.refractionIndex = Atmosphere::REFRACTION_INDEX;
     constants.scaleHeight = Atmosphere::SCALE_HEIGHT;
     constants.planetRadius = _planetRadius;
-    constants.attenuationCoefficient = XMFLOAT3(
+    constants.attenuationCoefficient = XMFLOAT4(
         attenuation( RED ),
         attenuation( GREEN ),
-        attenuation( BLUE )
+        attenuation( BLUE ),
+        1
     );
-    constants.sunIntensity = sunIntensity;
+
+    constants.sunIntensity = XMFLOAT4(
+        sunIntensity.x,
+        sunIntensity.y,
+        sunIntensity.z,
+        1
+    );
 
     // Fill in the subresource data.
     D3D11_SUBRESOURCE_DATA data;
@@ -131,6 +139,7 @@ void Atmosphere::setConstants(
     assert( SUCCEEDED( hr ) );
 
     d3dDeviceContext->VSSetConstantBuffers( 2, 1, &constantBuffer );
+    d3dDeviceContext->PSSetConstantBuffers( 2, 1, &constantBuffer );
 }
 
 
@@ -179,12 +188,14 @@ inline float Atmosphere::attenuation( int wavelength ) {
 /* Calculates the phase function */
 float Atmosphere::phaseFunction( float angle ) {
     
-    const float x = (5/9) * U + (125/729) * pow(U,3)
-        + pow( (64/27) - (325/243) * pow(U,2) + (1250/2187) * pow(U,4), 0.5f );
+    const float x = (5.0f/9.0f) * U + (125.0f/729.0f) * pow(U,3)
+        + pow( (64.0f/27.0f) - (325.0f/243.0f) * pow(U,2) + (1250.0f/2187.0f) * pow(U,4), 0.5f );
 
-    const float g = (5/9) * U - (4/3 - (25/81) * pow(U, 2)) * pow(x, -1/3)
-        + pow(x, 1/3);
+    const float g = (5.0f/9.0f) * U - (4.0f/3.0f - (25.0f/81.0f) * pow(U, 2)) * pow(x, -1.0f/3.0f)
+        + pow(x, 1.0f/3.0f);
 
-    return ((3 * (1-(pow(g,2))/(2*(2+pow(g,2)))))
-        * ((1 + pow(cos(angle),2)) / pow(1 + pow(g,2)+2 * g * cos(angle), 3/2)));
+    const float result = ((3.0f * (1-(pow(g,2))/(2.0f*(2.0f+pow(g,2)))))
+        * ((1.0f + pow(cos(angle),2)) / pow(1.0f + pow(g,2)+2.0f * g * cos(angle), 3.0f/2.0f)));
+
+    return result;
 }
