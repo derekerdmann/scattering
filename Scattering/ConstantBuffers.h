@@ -23,9 +23,11 @@ struct ViewingData {
  * position. Should be bound to register 1
  */
 struct SunData {
-    float sunAngle;
     DirectX::XMFLOAT4 sunPosition;
+    float sunAngle;
     float phaseFunctionResult;
+    float a;
+    float b;
 };
 
 

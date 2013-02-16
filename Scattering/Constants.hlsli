@@ -8,9 +8,14 @@ cbuffer viewingData : register( b0 )
 // updated as the sun moves through the sky
 cbuffer sunDependent : register( b1 )
 {
-    float sunAngle;              // theta
     float4 sunPosition;
-    float phaseFunctionResult;   // F( theta, g )
+    // The sun angle and phase function need to be packed into a single
+    // float4, since I couldn't get the correct values out of the buffer 
+    // when they were individual floats
+    // x component is angle
+    // y component is phase function result
+    float4 angleAndPhaseResult;              // theta
+    //float phaseFunctionResult;   // F( theta, g )
 }
 
 // Should only be set once

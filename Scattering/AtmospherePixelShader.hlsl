@@ -55,11 +55,12 @@ float scatteringIntegral( float4 Pa, float4 Pb, float4 Pc, float beta )
 
 float4 main( in ATMOS_PS_INPUT input ) : SV_TARGET
 {
-    float4 pos = input.Position;
+    float sunAngle = angleAndPhaseResult.x;
+    float phaseFunctionOutput = angleAndPhaseResult.y;
 
-    float R = sunIntensity.x
+    float R = sunAngle.x * sunIntensity.x
         * attenuationCoefficient.x
-        * phaseFunctionResult;
+        * phaseFunctionOutput;
         //* scatteringIntegral(
         //    cameraPosition,
         //    pos,
@@ -69,7 +70,7 @@ float4 main( in ATMOS_PS_INPUT input ) : SV_TARGET
 
     float G = sunIntensity.y
         * attenuationCoefficient.y
-        * phaseFunctionResult;
+        * phaseFunctionOutput;
         //* scatteringIntegral(
         //    cameraPosition,
         //    pos,
@@ -79,7 +80,7 @@ float4 main( in ATMOS_PS_INPUT input ) : SV_TARGET
 
     float B = sunIntensity.z
         * attenuationCoefficient.z
-        * phaseFunctionResult;
+        * phaseFunctionOutput;
         //* scatteringIntegral(
         //    cameraPosition,
         //    pos,

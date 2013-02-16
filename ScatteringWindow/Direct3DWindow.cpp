@@ -188,8 +188,11 @@ void Direct3DWindow::onResize() {
 /* Updates the items in the scene at each tick */
 void Direct3DWindow::updateScene() {
 
-    XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
-    pos = pos * 149597870.700f;
+    ZeroMemory( &_sun, sizeof( SunData ) );
+
+    XMVECTOR pos =  XMVectorSet( 0, 1, 1, 1 );
+    //XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
+    //pos = pos * 149597870.700f;
     XMStoreFloat3( &_sunPosition, pos );
 
     XMStoreFloat4( &_sun.sunPosition, pos );
@@ -203,7 +206,7 @@ void Direct3DWindow::updateScene() {
 
     // Fill in a buffer description.
     D3D11_BUFFER_DESC cbDesc;
-    cbDesc.ByteWidth = sizeof( SunData ) + 8;
+    cbDesc.ByteWidth = sizeof( SunData );
     cbDesc.Usage = D3D11_USAGE_DYNAMIC;
     cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
