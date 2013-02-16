@@ -1,22 +1,38 @@
 #include "Structures.hlsli"
 #include "Constants.hlsli"
 
+// Calculates the result of the Rayleigh scattering phase function
+float rayleighPhase( float angle )
+{
+    return 0.75 * (1.0 + angle * angle);
+}
+
+float miePhase( float angle )
+{
+    float U = 0.7;
+
+    float x = (5.0/9.0) * U + (125.0/729.0) * pow(U,3)
+        + pow( (64.0/27.0) - (325.0/243.0) * pow(U,2) + (1250.0/2187.0) * pow(U,4), 0.5f );
+
+    float g = (5.0/9.0) * U - (4.0/3.0 - (25.0/81.0) * pow(U, 2)) * pow(x, -1.0/3.0)
+        + pow(x, 1.0/3.0);
+
+    float result = ((3.0 * (1-(pow(g,2))/(2.0*(2.0+pow(g,2)))))
+        * ((1.0 + pow(cos(angle),2)) / pow(1.0 + pow(g,2)+2.0 * g * cos(angle), 3.0/2.0)));
+
+    return result;
+}
+
 
 float4 main( in ATMOS_PS_INPUT input ) : SV_TARGET
 {
 
     float fCos = dot( angleAndPhaseResult.x, input.Ray) / length(input.Ray);
-    float fCos2 = fCos * fCos;
 
-    float g =-0.90;
-    float g2 = 0.81;
-
-    float fRayleighPhase = 0.75 * (1.0 + fCos*fCos);
-	float fMiePhase= 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + fCos*fCos) / pow(1.0 + g2 - 2.0*g*fCos, 1.5);
-
-    float4 color = (fRayleighPhase * input.c0) + (fMiePhase * input.c1);
+    float4 color = (rayleighPhase( fCos ) * input.c0) + (miePhase( fCos ) * input.c1);
     color.z = max(color.x, color.z);
 
-    return 1 - exp(-2 * color);
+    float4 result = 1 - exp(-2 * color);
+    return result;
 }
 
