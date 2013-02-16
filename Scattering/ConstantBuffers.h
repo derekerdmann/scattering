@@ -39,6 +39,11 @@ struct StaticConstants {
     float refractionIndex;
     float scaleHeight;
     float planetRadius;
+    float atmosphereRadius;
+    float atmosScale;
+    float atmosScaleOverScaleHeight;
+    float a;
+    float b;
 };
 
 }

@@ -61,6 +61,7 @@ private:
     inline float attenuation( int wavelength );
 
     float _planetRadius;
+    float _karmanLine;
 
     ID3D11VertexShader* _vertexShader;
     ID3D11PixelShader* _pixelShader;

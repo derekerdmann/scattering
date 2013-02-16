@@ -190,9 +190,8 @@ void Direct3DWindow::updateScene() {
 
     ZeroMemory( &_sun, sizeof( SunData ) );
 
-    XMVECTOR pos =  XMVectorSet( 0, 1, 1, 1 );
-    //XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
-    //pos = pos * 149597870.700f;
+    XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
+    pos = pos * 149597870.700f;
     XMStoreFloat3( &_sunPosition, pos );
 
     XMStoreFloat4( &_sun.sunPosition, pos );

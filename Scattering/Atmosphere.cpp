@@ -23,7 +23,8 @@ Atmosphere::Atmosphere( float planetRadius, float karmanLine )
     : Sphere( planetRadius + karmanLine ),
       _vertexShader( nullptr ),
       _pixelShader( nullptr ),
-      _planetRadius( planetRadius )
+      _planetRadius( planetRadius ),
+      _karmanLine( karmanLine )
 {
 }
 
@@ -96,7 +97,7 @@ void Atmosphere::setConstants(
 
     // Fill in a buffer description.
     D3D11_BUFFER_DESC cbDesc;
-    cbDesc.ByteWidth = sizeof( StaticConstants ) + 4;
+    cbDesc.ByteWidth = sizeof( StaticConstants );
     cbDesc.Usage = D3D11_USAGE_DYNAMIC;
     cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -108,6 +109,9 @@ void Atmosphere::setConstants(
     constants.refractionIndex = Atmosphere::REFRACTION_INDEX;
     constants.scaleHeight = Atmosphere::SCALE_HEIGHT;
     constants.planetRadius = _planetRadius;
+    constants.atmosphereRadius = _planetRadius + _karmanLine;
+    constants.atmosScale = 1 / (constants.atmosphereRadius - _planetRadius);
+    constants.atmosScaleOverScaleHeight = constants.atmosScale / constants.scaleHeight;
     constants.attenuationCoefficient = XMFLOAT4(
         attenuation( RED ),
         attenuation( GREEN ),
