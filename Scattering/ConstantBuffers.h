@@ -35,13 +35,17 @@ struct SunData {
  */
 struct StaticConstants {
     DirectX::XMFLOAT4 sunIntensity;
-    DirectX::XMFLOAT4 attenuationCoefficient;
+    DirectX::XMFLOAT4 invWavelength;
     float refractionIndex;
     float scaleHeight;
     float planetRadius;
     float atmosphereRadius;
     float atmosScale;
     float atmosScaleOverScaleHeight;
+    float KrESun;
+    float KmESun;
+    float Kr4Pi;
+    float Km4Pi;
     float a;
     float b;
 };

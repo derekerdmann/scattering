@@ -39,7 +39,7 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
         float lightAngle = angleAndPhaseResult.x;
         float cameraAngle = dot( ray, samplePoint ) / h;
         float scatter = aOffset + depth * (scale(lightAngle) - scale(cameraAngle));
-        float attenuate = exp( -scatter * attenuationCoefficient );
+        float attenuate = exp( -scatter * invWavelength * Kr4Pi + Km4Pi );
         frontColor += attenuate * (depth * scaledLength);
         samplePoint += sampleRay;
 
@@ -50,8 +50,8 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
     output.Pc = float4( normalize( sunPosition ), 1 ) * planetRadius;
     output.Ray = float4( ray, 1 );
     output.Position = mul(  worldViewProjection, float4( target, 1 ) );
-    output.c0 = float4( frontColor * attenuationCoefficient, 1 );
-    output.c1 = float4( frontColor * attenuationCoefficient, 1 );
+    output.c0 = float4( frontColor * invWavelength * KrESun, 1 );
+    output.c1 = float4( frontColor * invWavelength, 1 );
 
     return output;
 }

@@ -112,10 +112,10 @@ void Atmosphere::setConstants(
     constants.atmosphereRadius = _planetRadius + _karmanLine;
     constants.atmosScale = 1 / (constants.atmosphereRadius - _planetRadius);
     constants.atmosScaleOverScaleHeight = constants.atmosScale / constants.scaleHeight;
-    constants.attenuationCoefficient = XMFLOAT4(
-        attenuation( RED ),
-        attenuation( GREEN ),
-        attenuation( BLUE ),
+    constants.invWavelength = XMFLOAT4(
+        1.0f / pow( 0.650f, 4.0f ),
+        1.0f / pow( 0.570f, 4.0f ),
+        1.0f / pow( 0.475f, 4.0f ),
         1
     );
 
@@ -125,6 +125,11 @@ void Atmosphere::setConstants(
         sunIntensity.z,
         1
     );
+
+    constants.KrESun = 0.000025f;
+    constants.KmESun = 0.00015f;
+    constants.Kr4Pi = 0.0025f * 4 * XM_PI;
+    constants.Km4Pi = 0.0015f * 4 * XM_PI;
 
     // Fill in the subresource data.
     D3D11_SUBRESOURCE_DATA data;

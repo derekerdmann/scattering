@@ -22,11 +22,17 @@ cbuffer sunDependent : register( b1 )
 cbuffer constants : register( b2 )
 {
     float4 sunIntensity;            // I0 [R, G, B]
-    float4 attenuationCoefficient;  // beta [R, G, B]
+    float4 invWavelength;  // beta [R, G, B]
     float refractionIndex;          // n
     float scaleHeight;              // H0
     float planetRadius;
     float atmosphereRadius;
     float atmosScale;
     float atmosScaleOverScaleHeight;
+    float KrESun;
+    float KmESun;
+    float Kr4Pi;
+    float Km4Pi;
+    float a;
+    float b;
 };
