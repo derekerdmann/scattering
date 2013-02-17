@@ -94,5 +94,5 @@ XMMATRIX Camera::getViewMatrix() {
 XMMATRIX Camera::getProjectionMatrix( float aspectRatio ) {
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-    return XMMatrixPerspectiveFovLH( XM_PIDIV2, aspectRatio, 0.1f, 1000000 );
+    return XMMatrixPerspectiveFovLH( XM_PIDIV4, aspectRatio, 0.1f, 1000000 );
 }
