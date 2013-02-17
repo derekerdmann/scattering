@@ -4,6 +4,7 @@
 #include "Planet.h"
 #include "Camera.h"
 #include "ConstantBuffers.h"
+#include "GameTimer.h"
 
 namespace Scattering {
 
@@ -23,7 +24,7 @@ public:
 	virtual void onResize(); 
 
     /* Updates the items in the scene at each tick */
-	virtual void updateScene();
+	virtual void updateScene(float dt);
 
     /* Renders the current scene to the window */
 	virtual void drawScene(); 
@@ -36,6 +37,9 @@ public:
 
     /* Handle mouse movement with the camera */
     void onMouseMove( WPARAM buttonState, int x, int y );
+
+    /* Updates the sun's position by increasing the rotation by this angle */
+    void moveSun( float angle );
 
 private:
 
@@ -71,11 +75,14 @@ private:
     Camera _camera;
 
     SunData _sun;
-    DirectX::XMFLOAT3 _sunPosition;
+    DirectX::XMVECTOR _sunPosition;
+    float _sunAngle;
 
     DirectX::XMFLOAT2 _lastMousePosition;
 
     static const UINT SUN_DIST;
+
+    GameTimer timer;
 };
 
 }

@@ -40,7 +40,8 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       //_planet( 10, 1 ),
       _planet( 6378.1f, 100 ),
       _camera( XMFLOAT3( 0, 6378.101f, 0 ), XMFLOAT3( 0, 6378.101f, 1 ), XMFLOAT3( 0, 1, 0 ) ),
-      _lastMousePosition( 0, 0 )
+      _lastMousePosition( 0, 0 ),
+      _sunAngle( 0 )
 {
     window = this;
 
@@ -73,6 +74,8 @@ Direct3DWindow::~Direct3DWindow(void) {
 /* Main application loop */
 int Direct3DWindow::start() {
 	MSG msg = {0};
+
+    timer.Reset();
  
 	while(msg.message != WM_QUIT) {
 
@@ -83,8 +86,10 @@ int Direct3DWindow::start() {
 
 		// Otherwise, do animation/game stuff.
 		} else {	
+            timer.Tick();
+
 			if( !_paused ) {
-				updateScene();	
+                updateScene( timer.DeltaTime() );	
 				drawScene();
 			} else {
 				Sleep(100);
@@ -186,17 +191,18 @@ void Direct3DWindow::onResize() {
 
 
 /* Updates the items in the scene at each tick */
-void Direct3DWindow::updateScene() {
+void Direct3DWindow::updateScene(float dt) {
+    
+    // Rotate the sun if needed
+	if( GetAsyncKeyState('A') & 0x8000 ) {
+		moveSun( dt );
+    }
 
     ZeroMemory( &_sun, sizeof( SunData ) );
 
-    XMVECTOR pos = XMVector3Normalize( XMVectorSet( 0, 1, 1, 0 ) );
-    pos = pos * 149597870.700f;
-    XMStoreFloat3( &_sunPosition, pos );
-
-    XMStoreFloat4( &_sun.sunPosition, pos );
+    XMStoreFloat4( &_sun.sunPosition, _sunPosition );
     _sun.sunAngle = XMVectorGetX(
-        XMVector3AngleBetweenVectors( pos, XMVectorSet( 0, 1, 0, 0 ) )
+        XMVector3AngleBetweenVectors( _sunPosition, XMVectorSet( 0, 1, 0, 0 ) )
     );
 
     _sun.phaseFunctionResult = _planet.phaseFunction( _sun.sunAngle );
@@ -321,6 +327,7 @@ float Direct3DWindow::aspectRatio() const {
 	return static_cast<float>(_width) / _height;
 }
 
+/* Handle mouse clicks */
 void Direct3DWindow::onMouseMove(WPARAM buttonState, int x, int y)
 {
 	if( (buttonState & MK_LBUTTON) != 0 )
@@ -462,7 +469,19 @@ void Direct3DWindow::setupDirect3D() {
 
 /* Set the scene */
 void Direct3DWindow::setScene() {
+    moveSun( 0 );
     _planet.createBuffer( _d3dDevice );
     _planet.setupShaders( _d3dDevice, _d3dDeviceContext );
     _planet.setConstants( _d3dDevice, _d3dDeviceContext, XMFLOAT3( 1, 1, 1 ) );
+}
+
+/* Adjust the sun position */
+void Direct3DWindow::moveSun( float delta ){
+
+    const float au = 149597870.700f;
+    _sunAngle += delta;
+    float x = au * sin( _sunAngle );
+    float y = au * sin( _sunAngle );
+
+    _sunPosition = XMVectorSet( x, y, 0, 0 );
 }
