@@ -7,7 +7,7 @@ using namespace Scattering;
 
 
 /* Thickness of atmosphere w/ uniform density (km) */
-const float Atmosphere::SCALE_HEIGHT = 7.994f;
+const float Atmosphere::SCALE_HEIGHT = 0.25f;
 
 /* Index of refraction of air - source Wikipedia */
 const float Atmosphere::REFRACTION_INDEX = 1.000293f;
