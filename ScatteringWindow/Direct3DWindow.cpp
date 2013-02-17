@@ -34,7 +34,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _minimized( false ),
       _maximized( false ),
       _resizing( false ),
-      _width( 600 ),
+      _width( 800 ),
       _height( 600 ),
       // Planet sizes given in kilometers
       //_planet( 10, 1 ),
