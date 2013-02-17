@@ -196,6 +196,10 @@ void Direct3DWindow::updateScene(float dt) {
     // Rotate the sun if needed
 	if( GetAsyncKeyState('A') & 0x8000 ) {
 		moveSun( dt );
+    } 
+
+    if( GetAsyncKeyState('Z') & 0x8000 ) {
+        moveSun( -dt );
     }
 
     ZeroMemory( &_sun, sizeof( SunData ) );
@@ -481,7 +485,7 @@ void Direct3DWindow::moveSun( float delta ){
     const float au = 149597870.700f;
     _sunAngle += delta;
     float x = au * sin( _sunAngle );
-    float y = au * sin( _sunAngle );
+    float y = au * cos( _sunAngle );
 
     _sunPosition = XMVectorSet( x, y, 0, 0 );
 }
