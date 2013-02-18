@@ -5,7 +5,7 @@ using namespace DirectX;
 using namespace Scattering;
 
 
-const float Planet::EARTH_RADIUS = 6378.101f;
+const float Planet::EARTH_RADIUS = 6371.0f;
 
 Planet::Planet( float radius, float karmanLine )
     : Sphere( radius ),

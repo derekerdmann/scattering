@@ -10,6 +10,7 @@ cbuffer viewingData : register( b0 )
 cbuffer sunDependent : register( b1 )
 {
     float3 sunPosition;
+    float3 lightDirection;
     // The sun angle and phase function need to be packed into a single
     // float4, since I couldn't get the correct values out of the buffer 
     // when they were individual floats

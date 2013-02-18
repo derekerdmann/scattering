@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Direct3DWindow.h"
+#include <sstream>
 
 using namespace Scattering;
 using namespace DirectX;
+using namespace std;
 
 namespace {
 
@@ -211,6 +213,11 @@ void Direct3DWindow::updateScene(float dt) {
     _sun.sunAngle = XMVectorGetX(
         XMVector3AngleBetweenVectors( _sunPosition, XMVectorSet( 0, 1, 0, 0 ) )
     );
+
+    XMFLOAT4 cameraPos;
+    _camera.getPosition( cameraPos ) ;
+    XMVECTOR cameraPosition = XMLoadFloat4( &cameraPos );
+    XMStoreFloat4( &_sun.lightDirection, XMVector3Normalize( - _sunPosition ) );
 
     _sun.phaseFunctionResult = _planet.phaseFunction( _sun.sunAngle );
 
@@ -491,10 +498,17 @@ void Direct3DWindow::setScene() {
 /* Adjust the sun position */
 void Direct3DWindow::moveSun( float delta ){
 
-    const float au = 149597870.700f;
+    const float au = 149597870.7f;
     _sunAngle += delta;
-    float x = au * sin( _sunAngle );
-    float y = au * cos( _sunAngle );
+    float x = sin( _sunAngle );
+    float y = cos( _sunAngle );
+
+    wstringstream debug;
+    debug << "Sun: (" << x << ", " << y << ")" << endl;
+    OutputDebugStringW( debug.str().c_str() );
+
+    x *= au;
+    y *= au;
 
     _sunPosition = XMVectorSet( x, y, 0, 0 );
 }

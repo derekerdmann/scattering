@@ -25,6 +25,7 @@ struct ViewingData {
  */
 struct SunData {
     DirectX::XMFLOAT4 sunPosition;
+    DirectX::XMFLOAT4 lightDirection;
     float sunAngle;
     float phaseFunctionResult;
     float a;

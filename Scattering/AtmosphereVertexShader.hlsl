@@ -16,11 +16,11 @@ ATMOS_PS_INPUT main( in PLANET_VS_INPUT input )
     
     float3 target = input.Position;
     float3 A = cameraPosition;
-    float3 ray = normalize( input.Position - A );
+    float3 ray = normalize( input.Position - cameraPosition );
 
-    float h = length( A );
+    float h = length( A ) - planetRadius;
     float aAngle = dot( ray, A ) / atmosphereRadius;
-    float aDepth = exp(atmosScaleOverScaleHeight * (planetRadius - h));
+    float aDepth = exp(atmosScaleOverScaleHeight * -h);
     float aOffset = aDepth * scale( aAngle );
 
     float far = length( ray );
@@ -37,7 +37,7 @@ ATMOS_PS_INPUT main( in PLANET_VS_INPUT input )
 
         h = length( samplePoint );
         float depth = exp( atmosScaleOverScaleHeight * (planetRadius - h) );
-        float lightAngle = dot( normalize( sunPosition ), samplePoint ) / h;
+        float lightAngle = dot( lightDirection, samplePoint ) / h;
         float cameraAngle = dot( ray, samplePoint ) / h;
         float scatter = aOffset + depth * (scale(lightAngle) - scale(cameraAngle));
         float3 attenuate = exp( -scatter * invWavelength.xyz * Kr4Pi + Km4Pi );
