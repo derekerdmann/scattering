@@ -10,7 +10,7 @@ float scale(float c)
 
 ATMOS_PS_INPUT main( in VS_INPUT input )
 {
-    int samples = 5;
+    int samples = 3;
 
     float3 lightVector = cameraPosition - sunPosition;
     
@@ -36,9 +36,8 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
     for( int i = 0; i < 5; i++ ){
 
         h = length( samplePoint );
-        float lightAngle = dot( normalize( sunPosition ), samplePoint ) / h;
-
         float depth = exp( atmosScaleOverScaleHeight * (planetRadius - h) );
+        float lightAngle = dot( normalize( sunPosition ), samplePoint ) / h;
         float cameraAngle = dot( ray, samplePoint ) / h;
         float scatter = aOffset + depth * (scale(lightAngle) - scale(cameraAngle));
         float3 attenuate = exp( -scatter * invWavelength.xyz * Kr4Pi + Km4Pi );
