@@ -17,8 +17,8 @@ Sphere::Sphere( float radius )
     // Sphere generation logic was adapted from sample code from
     // "3D Game Programming with DirectX 11" by Frank Luna.
 
-    Vertex topVertex = { XMFLOAT3( 0, _r, 0 ), XMFLOAT3( 0, 1, 0 ) };
-    Vertex bottomVertex = { XMFLOAT3( 0, -_r, 0 ), XMFLOAT3( 0, -1, 0 ) };
+    Vertex topVertex = { XMFLOAT3( 0, _r, 0 ) };
+    Vertex bottomVertex = { XMFLOAT3( 0, -_r, 0 ) };
 
     const UINT stackCount = 20, sliceCount = 20;
 
@@ -41,9 +41,6 @@ Sphere::Sphere( float radius )
 			v.position.x = radius*sinf(phi)*cosf(theta);
 			v.position.y = radius*cosf(phi);
 			v.position.z = radius*sinf(phi)*sinf(theta);
-
-			XMVECTOR p = XMLoadFloat3(&v.position);
-            XMStoreFloat3(&v.normal, XMVector3Normalize(p));
 
 			_vertices.push_back( v );
 		}
