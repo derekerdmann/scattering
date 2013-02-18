@@ -36,22 +36,22 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
     for( int i = 0; i < 5; i++ ){
 
         h = length( samplePoint );
+        float lightAngle = dot( normalize( sunPosition ), samplePoint ) / h;
+
         float depth = exp( atmosScaleOverScaleHeight * (planetRadius - h) );
-        float lightAngle = angleAndPhaseResult.x;
         float cameraAngle = dot( ray, samplePoint ) / h;
         float scatter = aOffset + depth * (scale(lightAngle) - scale(cameraAngle));
-        float attenuate = exp( -scatter * invWavelength * Kr4Pi + Km4Pi );
+        float3 attenuate = exp( -scatter * invWavelength.xyz * Kr4Pi + Km4Pi );
         frontColor += attenuate * (depth * scaledLength);
         samplePoint += sampleRay;
-
     }
 
     // Prep values for pixel shader
     ATMOS_PS_INPUT output;
     output.Ray = float4( ray, 1 );
     output.Position = mul(  worldViewProjection, float4( target, 1 ) );
-    output.c0 = float4( frontColor * invWavelength * KrESun, 1 );
-    output.c1 = float4( frontColor * invWavelength, 1 );
+    output.c0 = float4( frontColor * invWavelength.xyz * KrESun, 1 );
+    output.c1 = float4( frontColor * invWavelength.xyz, 1 );
 
     return output;
 }

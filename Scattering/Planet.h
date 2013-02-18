@@ -9,6 +9,8 @@ namespace Scattering {
 class Planet : public Sphere {
 public:
 
+    static const float EARTH_RADIUS;
+
     /* Constructor
      * radius - The radius of the planet
      * karmanLine - The upper boundary of the planet's atmosphere

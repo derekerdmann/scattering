@@ -37,9 +37,12 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       _width( 800 ),
       _height( 600 ),
       // Planet sizes given in kilometers
-      //_planet( 10, 1 ),
-      _planet( 6378.1f, 100 ),
-      _camera( XMFLOAT3( 0, 6378.101f, 0 ), XMFLOAT3( 1, 6378.101f, 0 ), XMFLOAT3( 0, 1, 0 ) ),
+      _planet( Planet::EARTH_RADIUS, Planet::EARTH_RADIUS * 0.025 ),
+      _camera(
+        XMFLOAT3( 0, Planet::EARTH_RADIUS + 1, 0 ),
+        XMFLOAT3( 1, Planet::EARTH_RADIUS + 1, 0 ),
+        XMFLOAT3( 0, 1, 0 )
+      ),
       _lastMousePosition( 0, 0 ),
       _sunAngle( 0 )
 {
