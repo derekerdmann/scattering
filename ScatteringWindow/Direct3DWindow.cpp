@@ -39,7 +39,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
       // Planet sizes given in kilometers
       //_planet( 10, 1 ),
       _planet( 6378.1f, 100 ),
-      _camera( XMFLOAT3( 0, 6378.101f, 0 ), XMFLOAT3( 0, 6378.101f, 1 ), XMFLOAT3( 0, 1, 0 ) ),
+      _camera( XMFLOAT3( 0, 6378.101f, 0 ), XMFLOAT3( 1, 6378.101f, 0 ), XMFLOAT3( 0, 1, 0 ) ),
       _lastMousePosition( 0, 0 ),
       _sunAngle( 0 )
 {
@@ -250,7 +250,7 @@ void Direct3DWindow::drawScene() {
 	assert( _d3dDeviceContext );
 	assert( _swapChain );
 
-	DirectX::XMVECTORF32 Background = {1.0f, 1.0f, 1.0f, 1.0f};
+	DirectX::XMVECTORF32 Background = {0.0f, 0.0f, 0.0f, 1.0f};
 
 	_d3dDeviceContext->ClearRenderTargetView(
         _renderTargetView,
