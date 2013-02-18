@@ -15,7 +15,8 @@ enum ColorWavelengths {
 /* Viewing Data constant buffer. Should be bound to register 0 */
 struct ViewingData {
     DirectX::XMFLOAT4 cameraPosition;
-    DirectX::XMFLOAT4X4 wordViewProjection;
+    DirectX::XMFLOAT4X4 worldViewProjection;
+    DirectX::XMFLOAT4X4 invWorldViewProjection;
 };
 
 

@@ -8,7 +8,7 @@ float scale(float c)
 	return scaleHeight * exp(-0.00287 + x*(0.459 + x*(3.83 + x*(-6.80 + x*5.25))));
 }
 
-ATMOS_PS_INPUT main( in VS_INPUT input )
+ATMOS_PS_INPUT main( in PLANET_VS_INPUT input )
 {
     int samples = 3;
 

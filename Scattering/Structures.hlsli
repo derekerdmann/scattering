@@ -1,11 +1,13 @@
 // Vertex shader input format
-struct VS_INPUT {
+struct PLANET_VS_INPUT {
     float3 Position : POSITION;
+    float3 Normal : NORMAL;
 };
 
 // Vertex shader output format
-struct PS_INPUT {
+struct PLANET_PS_INPUT {
     float4 Position : SV_POSITION;
+    float4 Normal : NORMAL;
 };
 
 // Vertex shader output format

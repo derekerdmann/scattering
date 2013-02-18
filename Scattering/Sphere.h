@@ -8,6 +8,7 @@ namespace Scattering {
 /* Records single points for a shape vertex */
 struct Vertex {
     DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
 };
 
 /* Generates points for a sphere */

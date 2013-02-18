@@ -3,6 +3,7 @@ cbuffer viewingData : register( b0 )
 {
     float3 cameraPosition;
     float4x4 worldViewProjection;
+    float4x4 invWorldViewProjection;
 };
 
 // updated as the sun moves through the sky

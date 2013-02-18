@@ -274,7 +274,13 @@ void Direct3DWindow::drawScene() {
 	XMMATRIX worldViewProj = world * view * proj;
 
     ViewingData viewData;
-    XMStoreFloat4x4( &viewData.wordViewProjection, worldViewProj );
+    XMStoreFloat4x4( &viewData.worldViewProjection, worldViewProj );
+
+    XMMATRIX A = worldViewProj;
+    A.r[3] = XMVectorSet( 0, 0, 0, 1 );
+    XMVECTOR det = XMMatrixDeterminant( A );
+
+    XMStoreFloat4x4( &viewData.invWorldViewProjection, XMMatrixTranspose( XMMatrixInverse( &det, A ) ) );
     _camera.getPosition( viewData.cameraPosition );
 
     assert( sizeof( ViewingData ) % 16 == 0 );
