@@ -18,14 +18,15 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
     float3 A = cameraPosition;
     float3 ray = normalize( input.Position - A );
 
+    float h = length( A );
     float aAngle = dot( ray, A ) / atmosphereRadius;
-    float aDepth = exp(-1/scaleHeight);
+    float aDepth = exp(atmosScaleOverScaleHeight * (planetRadius - h));
     float aOffset = aDepth * scale( aAngle );
 
     float far = length( ray );
 
     // Calculate scattering
-    float sampleLength = far / float( samples );
+    float sampleLength = far / samples;
     float scaledLength = sampleLength * atmosScale;
     float3 sampleRay = ray * sampleLength;
     float3 samplePoint = A + sampleRay * 0.5;
@@ -34,7 +35,7 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
     float3 frontColor = float3( 0, 0, 0 );
     for( int i = 0; i < 5; i++ ){
 
-        float h = length( samplePoint );
+        h = length( samplePoint );
         float depth = exp( atmosScaleOverScaleHeight * (planetRadius - h) );
         float lightAngle = angleAndPhaseResult.x;
         float cameraAngle = dot( ray, samplePoint ) / h;
@@ -47,7 +48,6 @@ ATMOS_PS_INPUT main( in VS_INPUT input )
 
     // Prep values for pixel shader
     ATMOS_PS_INPUT output;
-    output.Pc = float4( normalize( sunPosition ), 1 ) * planetRadius;
     output.Ray = float4( ray, 1 );
     output.Position = mul(  worldViewProjection, float4( target, 1 ) );
     output.c0 = float4( frontColor * invWavelength * KrESun, 1 );
