@@ -91,5 +91,6 @@
     <None Include="Constants.hlsli">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

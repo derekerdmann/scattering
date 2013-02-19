@@ -503,9 +503,9 @@ void Direct3DWindow::moveSun( float delta ){
     float x = sin( _sunAngle );
     float y = cos( _sunAngle );
 
-    wstringstream debug;
-    debug << "Sun: (" << x << ", " << y << ")" << endl;
-    OutputDebugStringW( debug.str().c_str() );
+    // wstringstream debug;
+    //debug << "Sun: (" << x << ", " << y << ")" << endl;
+    //OutputDebugStringW( debug.str().c_str() );
 
     x *= au;
     y *= au;
