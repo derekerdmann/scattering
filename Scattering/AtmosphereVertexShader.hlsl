@@ -22,7 +22,7 @@ ATMOS_PS_INPUT main( in PLANET_VS_INPUT input )
     float3 start = cameraPosition.xyz;
 
     // Initialize the scattering loop variables
-    float sampleLength = far / samples;
+    float sampleLength = far / float( samples );
     float scaledLength = sampleLength * atmosScale;
     float3 sampleRay = ray * sampleLength;
     float3 samplePoint = start + sampleRay * 0.5;
@@ -51,8 +51,8 @@ ATMOS_PS_INPUT main( in PLANET_VS_INPUT input )
     ATMOS_PS_INPUT output;
     output.Ray = float4( ray, 1 );
     output.Position = mul(  worldViewProjection, float4( pos, 1 ) );
-    output.c0 = float4( frontColor * invWavelength.xyz * KrESun, 1 );
-    output.c1 = float4( frontColor * invWavelength.xyz, 1 );
+    output.c0 = float4( frontColor * (invWavelength.xyz * KrESun), 1 );
+    output.c1 = float4( frontColor * KmESun, 1 );
 
     return output;
 }

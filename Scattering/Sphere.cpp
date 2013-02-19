@@ -20,7 +20,7 @@ Sphere::Sphere( float radius )
     Vertex topVertex = { XMFLOAT3( 0, _r, 0 ), XMFLOAT3( 0, 1, 0 ) };
     Vertex bottomVertex = { XMFLOAT3( 0, -_r, 0 ), XMFLOAT3( 0, -1, 0 ) };
 
-    const UINT stackCount = 20, sliceCount = 20;
+    const UINT stackCount = 80, sliceCount = 40;
 
 	_vertices.push_back( topVertex );
 

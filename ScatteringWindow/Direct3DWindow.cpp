@@ -46,7 +46,7 @@ Direct3DWindow::Direct3DWindow(HINSTANCE hinstance)
         XMFLOAT3( 0, 1, 0 )
       ),
       _lastMousePosition( 0, 0 ),
-      _sunAngle( 0 )
+      _sunAngle( XM_PI/2 )
 {
     window = this;
 
