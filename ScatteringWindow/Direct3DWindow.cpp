@@ -217,7 +217,7 @@ void Direct3DWindow::updateScene(float dt) {
     XMFLOAT4 cameraPos;
     _camera.getPosition( cameraPos ) ;
     XMVECTOR cameraPosition = XMLoadFloat4( &cameraPos );
-    XMStoreFloat4( &_sun.lightDirection, XMVector3Normalize( - _sunPosition ) );
+    XMStoreFloat4( &_sun.lightDirection, XMVector3Normalize( _sunPosition ) );
 
     _sun.phaseFunctionResult = _planet.phaseFunction( _sun.sunAngle );
 

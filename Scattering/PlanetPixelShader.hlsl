@@ -21,7 +21,6 @@ float4 main( in PLANET_PS_INPUT input ) : SV_TARGET
         float3 v = reflect( -light, input.Normal.xyz );
         diffuse = diffuseFactor * color;
         float d = dot( v, toEye );
-        //specular = pow( max( d, 0.0f ), 1 );
     }
 
     return ambient + diffuse + specular;
