@@ -35,7 +35,7 @@ float miePhase( float angle )
 float4 main( in ATMOS_PS_INPUT input ) : SV_TARGET
 {
 
-    float fCos = dot( lightDirection, input.Ray) / length(input.Ray);
+    float fCos = dot( lightDirection.xyz, input.Ray.xyz) / length(input.Ray);
 
     float4 color = (rayleighPhase( fCos ) * input.c0) + (miePhase( fCos ) * input.c1);
     color.w = max(color.x, color.z);
