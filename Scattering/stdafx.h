@@ -13,6 +13,5 @@
 #include <DirectXPackedVector.h>
 #include <d3d11.h>
 #include <D3Dcompiler.h>
-#include "d3dx11effect.h"
 #include "D3DHelper.h"
 
