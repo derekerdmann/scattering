@@ -138,7 +138,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="D3DHelper.h" />
-    <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Sphere.h" />
