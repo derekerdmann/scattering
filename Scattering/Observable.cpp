@@ -4,11 +4,28 @@
 using namespace Scattering;
 using namespace std;
 
-Observable::Observable(void)
-{
+
+/* Constructor */
+Observable::Observable(void) { }
+
+
+/* Destructor */
+Observable::~Observable(void) { }
+
+
+/* Adds the observer to future updates */
+void Observable::attach( Observer *observer ) {
+
 }
 
 
-Observable::~Observable(void)
-{
+/* Removes the observer from future updates */
+void Observable::detach( Observer *observer ) {
+
+}
+
+
+/* Broadcasts updates to all observers */
+void Observable::notify() {
+
 }

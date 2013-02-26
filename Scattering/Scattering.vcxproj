@@ -140,6 +140,7 @@
     <ClInclude Include="D3DHelper.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Observable.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stdafx.h" />
